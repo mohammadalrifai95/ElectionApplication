@@ -17,6 +17,7 @@
  
 	function dropDownSelect(areId){
 
+		alert("areId = "+ areId);
 		$('#spacer1').show();
 		document.getElementById('spacer1').innerHTML = areId;
     	$.ajax({
@@ -89,9 +90,9 @@
                 contentType: "application/json",
                 success: function(msg){
                 	alert("success 123");
-                	alert(msg);
+                	//alert(msg); 
 //                 	document.getElementById('depratmentDesc1').innerHTML = msg;
-    					document.getElementById('spacer1').innerHTML = msg;
+    					//document.getElementById('spacer1').innerHTML = msg;
 //                     $("#spacer1").html(msg);
 //                     $('#output').append(msg);
 //     					window.location.href="getCandidateByAreaId";
@@ -152,7 +153,7 @@ Hello Election Application -- This is home page
 	<p id="depratmentDesc1"></p>
 </div>
 
-<a href="home2.jsp"  style="width: 30%; float:left;">
+<a href="home2"  style="width: 30%; float:left;">
 <button>back</button>
 </a>
 

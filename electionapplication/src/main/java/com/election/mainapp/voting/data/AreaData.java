@@ -9,6 +9,8 @@ public class AreaData {
 	
 
 	public AreaData() {
+		
+		
 	}
 
 

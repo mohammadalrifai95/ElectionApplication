@@ -113,7 +113,7 @@ Select Election Area
 <div class="spacer2" style="background-color:#9E5A63">
 <div class="spacer"> </div>
 
-<a href="home3.jsp"  style="width: 30%; float:left;">
+<a href="home3"  style="width: 30%; float:left;">
 <button>back</button>
 </a>
 

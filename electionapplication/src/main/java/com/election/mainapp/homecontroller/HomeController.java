@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.leader.Candidate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,21 +17,73 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.election.mainapp.voting.data.CandidateData;
+import com.election.mainapp.voting.data.UserData;
 import com.election.mainapp.voting.data.VoterData;
+import com.election.mainapp.voting.service.GenericService;
+import com.election.mainapp.voting.serviceI.GenericServiceI;
+import com.election.mainapp.generic.StringUtility;
 import com.election.mainapp.voting.data.AreaData;
 
 @Controller
 public class HomeController {
 
+	@Autowired
+	GenericServiceI genericService;
+	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home() {
 		
-		
 
-
-		return "home.jsp";
-
+		return "home";
 	}
+	
+	
+	
+	@RequestMapping(value = "/Login", method = RequestMethod.GET)
+	public ModelAndView afterLogin(UserData usrdta) {
+		
+		
+		ModelAndView mv= new ModelAndView();
+		if(StringUtility.isEmpty(usrdta.getUserName()) || StringUtility.isEmpty(usrdta.getPassword()) ) {
+			
+			mv.setViewName("home");
+			mv.addObject("errorLoginMessage", "Please enter Username and Password");
+			return mv;
+		}
+		
+		
+		UserData userData = genericService.findUser(usrdta);
+		
+		
+		
+		
+		if(userData == null ) {
+			
+			mv.setViewName("home");
+			mv.addObject("errorLoginMessage", "Username or password is incorrect, Please enter valid username and password");
+		}
+		else {
+			mv.setViewName("home2");
+		}
+		
+		return mv;
+		
+	}
+	
+	
+	@RequestMapping("/register")
+	public ModelAndView welcome(UserData userData) {
+		ModelAndView mv = new ModelAndView();
+		
+		
+		genericService.saveUser(userData);
+		
+		mv.setViewName("home2");
+		mv.addObject("userData", userData);
+		
+		return mv;
+	}
+	
 	
 	
 	@RequestMapping("/welcome")
@@ -86,7 +139,7 @@ public class HomeController {
 
 		mv.addObject("listAreaData", listAreaData);
 		
-		mv.setViewName("home2.jsp");
+		mv.setViewName("home2");
 
 		return mv;
 	}
@@ -150,19 +203,20 @@ public class HomeController {
 		
 		mv.addObject("listAreaData", listAreaData);
 		
-		mv.setViewName("home3.jsp");
+		mv.setViewName("home3");
 		
 		return mv;
 	}
 	
 	
 	@RequestMapping("/getCandidateByAre")
+	@ResponseBody
 	public String getCandidateByAreaId(@RequestParam int areId) {
 		
 		
 		System.out.println("Alrifai Alrifai");
 		
-		return "";
+		return "Message from server"; 
 	}
 	
 	
@@ -184,7 +238,7 @@ public class HomeController {
 		 //System.out.println(message);
 		
 			mv.addObject("candidatewithvoterList", candidatewithvoterList);
-			mv.setViewName("candidate.jsp");
+			mv.setViewName("candidate");
 		
 		return mv;
 	}

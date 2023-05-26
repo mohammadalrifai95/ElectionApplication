@@ -24,7 +24,7 @@
     
         $(document).ready(function() {
         	        	
-            $('#Candidates').click(function ()
+            $('#Next').click(function ()
             {
                 $.ajax({
                     type: "GET",
@@ -34,7 +34,8 @@
                     success: function(msg){
                     	alert("success");
                         $('#output').append(msg);
-                     window.location.href="home3";
+                        window.location.href="home3";
+//                      window.location.href="home3";
 //                         window.location.href="/";
 //                         window.location.href="welcome";
 //                         window.location.href = '/JspControllerHandler?employee='+ JSON.stringify(emp); // redirect     //this would be GET
@@ -55,7 +56,7 @@
 
 .spacer{
   display:block;
-  height:40px;
+  height:100px;
   width:100%;
   margin: 0 auto;
   content:""; 
@@ -64,16 +65,12 @@
 </style>
 <body>
 
-<div align="center" style="background-color: yellow; width: 100%; height: 100%">
+<div align="center" style="background-color: #61892F; width: 100%; height: 100%">
 
-<div class="spacer"></div>
-<div class="spacer"></div>
-<div class="spacer"></div>
-<div class="spacer"></div>
+<br \><br \><br \>	
 
 Hello Election Application -- This is home page
 
-<div class="spacer"></div>
 
 <h1>Select Election Area</h1>
 
@@ -84,29 +81,30 @@ Hello Election Application -- This is home page
     </c:forEach>
 </select>
 
-<div id="candidatechangedependsonarea">
 
+<div class="spacer"></div>
+
+
+<a href="/"  style="width: 30%; float:left;">
+<button>back</button>
+</a>
+
+
+
+
+<input type="submit" value = "Next" id="Next" name = "Next">
+
+<div class="spacer"></div><div class="spacer"></div>
+
+<div class="spacer" id="spacer1" style="display:none">
+
+		Lots of data.<br> Should be flushed to the browser every now
+		and then.<br> This will take seconds...<br>
+	<p id="depratmentDesc1"></p>
 </div>
 
-<!-- <input type="submit" value = "votessss" id="votessss" name = "votessss" onclick="dropDownSelect(this)" > -->
-
-<div class="spacer"></div>
-
-<input type="submit" value = "Candidates" id="Candidates" name = "Candidates">
 
 
-		<div class="spacer" id="spacer1" style="display:none">
-
-				Lots of data.<br> Should be flushed to the browser every now
-				and then.<br> This will take seconds...<br>
-			<p id="depratmentDesc1"></p>
-		</div>
-
-
-
-		<div class="spacer"></div>
-<div class="spacer"></div>
-<div class="spacer"></div>
 <div class="spacer" id="output">...</div>
 </div>
 

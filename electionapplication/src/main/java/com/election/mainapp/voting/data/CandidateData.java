@@ -4,11 +4,27 @@
 package com.election.mainapp.voting.data;
 
 import java.sql.Date;
+import java.util.Set;
+import java.util.HashSet;
 
 import com.election.mainapp.voting.dependency.Address;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+
+@Entity
+@Table(name = "T_Candidate")
 public class CandidateData {
 
+	@Id 
+	@GeneratedValue( strategy=GenerationType.AUTO )	
 	String id;
 	String ssn;
 	String name;
@@ -22,9 +38,16 @@ public class CandidateData {
 	String status;
 	String position;
 	String addressStr;
-	Address address;
+	//Address address;
 	
+	@OneToMany(mappedBy = "candidateData",  fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	Set<VoterData> voterDataSet;
 	
+	public CandidateData() {
+		
+		voterDataSet = new HashSet<VoterData>();
+		
+	}
 	
 	public String getId() {
 		return id;
@@ -182,20 +205,18 @@ public class CandidateData {
 
 
 
-	public Address getAddress() {
-		return address;
-	}
+//	public Address getAddress() {
+//		return address;
+//	}
 
 
 
-	public void setAddress(Address address) {
-		this.address = address;
-	}
+//	public void setAddress(Address address) {
+//		this.address = address;
+//	}
 
 
 
-	public CandidateData() {
-		
-	}
+
 
 }

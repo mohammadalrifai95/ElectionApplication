@@ -3,6 +3,7 @@
  
 <%-- <%@ taglib  prefix="c" uri="http://java.sun.com/jsp/jstl/core"%> --%>
 <%-- <%@ taglib  prefix="c" uri="http://java.sun.com/jsp/jstl/core"%> --%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
     
 <!DOCTYPE html>
@@ -12,6 +13,15 @@
 <title>Welcome to Election System Application</title>
 </head>
 <style>
+
+.spacer0{
+  display:block;
+  height:10px;
+  width:100%;
+  margin: 0 auto;
+  content:""; 
+}
+
 
 .spacer{
   display:block;
@@ -28,6 +38,9 @@
   content:""; 
 }
 
+
+  
+
 </style>
 <body>
 
@@ -37,21 +50,35 @@
 
 Welcome to Election System Application -- This is home page
 
-<div class="spacer"></div>
+<div class="spacer0"></div>
 
-<h1>Election Application</h1>
- 
-<input type="submit" value = "Next" id="NextButton" name = "NextButton"> 
+<h4>Please login below if you already have an account or register if this is a first time.</h4>
+
+<lable style="color:red;">${errorLoginMessage}</lable>
+<form action="Login">
 
 
+<label>User Name:</label> <input type="text" name="userName" value="" onclick="this.value=''"/><br/><br/>  
+<label>Password:</label> <input type="password" name="password"  value="" onclick="this.value=''" style="margin-left: 1%;" /><br/><br/>
+<input type="submit" value = "Login" id="Login" name = "Login"> <br/><br/>
+</form>
+<input type="submit" value = "Next" id="NextButton" name = "NextButton"> <br/><br/>
 
-<div class="spacer2"></div>
-<div class="spacer"></div>
-<div class="spacer"></div>
+<div class="spacer">Or</div>
+
+<form action="register">  
+
+<label>First Name:</label> <input type="text" name="firstName" value="" onclick="this.value=''"/><br/><br/>
+<label>Last Name:</label> <input type="text" name="lastName" value="" onclick="this.value=''"/><br/><br/>
+<label>Email:</label> <input type="text" name="email"  value="" onclick="this.value=''"  style="margin-left: 2.5%;"/><br/><br/>
+<label>User Name:</label> <input type="text" name="userName" value="" onclick="this.value=''"/><br/><br/>  
+<label>Password:</label> <input type="password" name="password"  value="" onclick="this.value=''" style="margin-left: 1%;" /><br/><br/>
+<input type="submit" value="register"/>  
+
+</form>  
+
 <div class="spacer" id="output"></div>
-
-
-
+<div class="spacer"></div>
 
 </div>
 
