@@ -11,4 +11,8 @@ public interface UserDaoI  extends JpaRepository<UserData, Integer>{
 	//@Query("SELECT u FROM User u WHERE u.status = ?1 and u.name = ?2")
 	@Query("from UserData  where userName = ?1 and password = ?2")
 	UserData findByUserNameAndPassword(String userName, String password );
+
+	UserData findById(int id);
+	
+	
 }

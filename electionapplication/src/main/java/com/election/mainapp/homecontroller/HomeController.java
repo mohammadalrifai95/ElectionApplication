@@ -1,87 +1,247 @@
 package com.election.mainapp.homecontroller;
 
-import java.net.http.HttpRequest;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.integration.leader.Candidate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.client.RestTemplate;
+
 
 import com.election.mainapp.voting.data.CandidateData;
 import com.election.mainapp.voting.data.UserData;
 import com.election.mainapp.voting.data.VoterData;
-import com.election.mainapp.voting.service.GenericService;
 import com.election.mainapp.voting.serviceI.GenericServiceI;
+
+//import ch.qos.logback.classic.Logger;
+import java.util.logging.Logger;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+//import jakarta.ws.rs.HttpMethod;
+
 import com.election.mainapp.generic.StringUtility;
+import com.election.mainapp.generic.interfaces.FooExtendedI;
 import com.election.mainapp.voting.data.AreaData;
+
+
 
 @Controller
 public class HomeController {
 
 	@Autowired
+	Logger logger; //= Logger.getLogger(HomeController.class.getName());
+	
+	@Autowired
 	GenericServiceI genericService;
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home() {
+	public String home(HttpServletRequest request) {
 		
 
+		  String[] countryCodes = Locale.getISOCountries();
+//		for (String countryCode : countryCodes) {
+//		    Locale locale = new Locale("", countryCode);
+//		    String code = locale.getCountry();
+//		    String name = locale.getDisplayCountry();
+//		     
+//		    System.out.printf("[%s] %s\n", code, name);
+//		}
+		 
+	        Map<String, String> mapCountries = new TreeMap<>();
+	 
+	        for (String countryCode : countryCodes) {
+	            Locale locale = new Locale("", countryCode);
+	            String code = locale.getCountry();
+	            String name = locale.getDisplayCountry();
+	            mapCountries.put(code, name);
+	        }
+	 
+	        request.setAttribute("mapCountries", mapCountries);
+	 
+	        //String registerForm = "frontend/register_form.jsp";
+	        //RequestDispatcher dispatcher = request.getRequestDispatcher(registerForm);
+	       // dispatcher.forward(request, response);
+		
+		
+		
+		
 		return "home";
+	}
+	
+
+
+
+
+	@RequestMapping(value = "/contactUs", method = RequestMethod.GET)
+	public String contactUs( HttpServletRequest request) {
+		
+		
+		
+		
+		return "contactus";
+	}
+	
+	
+	@RequestMapping(value = "/home2", method = RequestMethod.GET)
+	public String home2( HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		
+		String usenName = (String)session.getAttribute("usenName");
+		String password= (String)session.getAttribute("password");
+		
+		System.out.println("usenName = " +usenName + "  password = "+ password);
+		
+		
+		return "home2";
+	}
+	
+	
+	
+	private void printThing(FooExtendedI mfI) {
+		System.out.println("printThing called **");
+		mfI.print();
 	}
 	
 	
 	
 	@RequestMapping(value = "/Login", method = RequestMethod.GET)
-	public ModelAndView afterLogin(UserData usrdta) {
+	public ModelAndView AtemptingOfLogin(UserData usrdta, HttpServletRequest request, String ... alredyLoggedin) {
 		
+		
+		lambdaExpressionTest();
+		
+		
+		logger.info("This is my first log4j's statement");
 		
 		ModelAndView mv= new ModelAndView();
+		HttpSession session = request.getSession();
+		UserData userData = null;
+		if(alredyLoggedin == null) {
+		//mv.addObject("errorLoginMessage", "");
+		
 		if(StringUtility.isEmpty(usrdta.getUserName()) || StringUtility.isEmpty(usrdta.getPassword()) ) {
-			
+			//Username and password left empty
 			mv.setViewName("home");
 			mv.addObject("errorLoginMessage", "Please enter Username and Password");
 			return mv;
 		}
 		
 		
-		UserData userData = genericService.findUser(usrdta);
-		
-		
-		
-		
+		userData = genericService.findUser(usrdta);
 		if(userData == null ) {
-			
+			//Incorrect user and pass entered
 			mv.setViewName("home");
 			mv.addObject("errorLoginMessage", "Username or password is incorrect, Please enter valid username and password");
 		}
 		else {
+			session.setAttribute("usenName", userData.getUserName());
+			session.setAttribute("password", userData.getPassword());
+			
 			mv.setViewName("home2");
 		}
 		
-		return mv;
+		}else {
+			System.out.println(session.getAttribute("usenName"));
+			mv.setViewName("home2");
+		}
 		
+		if(userData!=null) {
+			consumeRestAPIUsingRestTemplateTest(userData);			
+		}
+		
+		
+		return mv;
 	}
 	
 	
-	@RequestMapping("/register")
-	public ModelAndView welcome(UserData userData) {
-		ModelAndView mv = new ModelAndView();
+
+
+
+
+
+	private void consumeRestAPIUsingRestTemplateTest(UserData userData) {
+
+		
+		  //Call(consume) REST API
+		  String uri = "http://localhost:8080//getData/"+userData.getId();
+		  RestTemplate restTemplate = new RestTemplate();
+		  
+		  UserData ud = restTemplate.getForObject(uri, UserData.class);
+//		  UserData ud = restTemplate.postForObject(uri, usrdta, UserData.class);
+//		  UserData ud  = restTemplate.exchange(uri, HttpMethod.PUT, usrdta, UserData.class, 1);
+
+		  
+		  if(ud!=null) {
+			  System.out.println("User FirstName: " + ud.getFirstName());
+			  System.out.println("User Email: " + ud.getEmail());
+		  }
+		
+	}
+
+
+
+
+
+	private void lambdaExpressionTest() {
+
+		//used of lambda expression
+		 List<String> list = Arrays.asList("jai", "adithya", "raja");
+	      list.stream().map( s -> s +  " - " + s.toUpperCase()).forEach(s -> System.out.println(s));
+		
+		//used of lambda expression
+	      FooExtendedI mfI = () -> {
+			System.out.println("Hello ");
+			System.out.println("Before 1/0");
+			System.out.println("Before 1/0");
+			System.out.println("Before 1/0");
+//			System.out.println(1/0);
+//			System.out.println("After 1/0");
+		};
+//		printThing(mfI);
+		mfI.print();
 		
 		
-		genericService.saveUser(userData);
 		
-		mv.setViewName("home2");
-		mv.addObject("userData", userData);
+	}
+
+
+
+
+
+	@RequestMapping("/userRegistration")
+	@ResponseBody
+	public List<String> userRegistration(UserData usrdta) {
+
+
+		List<String> messageList = new ArrayList<String>();
+
 		
-		return mv;
+		if(StringUtility.isEmpty(usrdta.getUserName()) || StringUtility.isEmpty(usrdta.getPassword()) ) {
+			messageList.add("Failed_Registration");
+			messageList.add("To complete registration Please fill all below required fields.");
+			return messageList;
+		}
+		
+		
+		genericService.saveUser(usrdta);
+		
+		messageList.add(usrdta.getUserName());
+		messageList.add(usrdta.getPassword());
+		messageList.add("You have Successfully registered, you now can sign in with your credential");
+		
+		return messageList;
 	}
 	
 	
@@ -338,6 +498,40 @@ public class HomeController {
 		
 		
 		return "home";
+	}
+	
+	
+	
+	
+	
+	@RequestMapping("/addCandidateFromContactusScreen")
+	@ResponseBody
+	public List<String> addCandidateFromContactusScreen(CandidateData candidateData) {
+
+
+		List<String> messageList = new ArrayList<String>();
+
+		
+		if(StringUtility.isEmpty(candidateData.getFirstName()) 
+				|| StringUtility.isEmpty(candidateData.getLastName())
+				|| StringUtility.isEmpty(candidateData.getMobile())
+				|| StringUtility.isEmpty(candidateData.getEmail())
+				|| StringUtility.isEmpty(candidateData.getSsn())
+				|| StringUtility.isEmpty(candidateData.getLocation())
+						 ) {
+			messageList.add("Failed_Registration");
+			messageList.add("Please fill all below required fileds in order to add new candidate");
+			return messageList;
+		}
+		
+		
+		genericService.saveCandidate(candidateData);
+		
+//		messageList.add(usrdta.getUserName());
+//		messageList.add(usrdta.getPassword());
+		messageList.add("You have Successfully registered, you now can sign in with your credential");
+		
+		return messageList;
 	}
 	
 	

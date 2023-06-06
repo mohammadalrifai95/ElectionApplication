@@ -20,24 +20,55 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 
 @Entity
-@Table(name = "T_Candidate")
+@Table(name = "T_CANDIDATE")
 public class CandidateData {
 
 	@Id 
 	@GeneratedValue( strategy=GenerationType.AUTO )	
-	String id;
-	String ssn;
-	String name;
-	String email;
-	String AreaAppliedfor;
-	String DepartmentOfAppliedPosition;
-	Date date;
-	String title;
-	String resume;
-	String companyName;
-	String status;
-	String position;
+	private int id;
+	private String ssn;
+	private String name;
+	private String firstName;
+	private String lastName;
+	private String email;
+	private String AreaAppliedfor;
+	private String DepartmentOfAppliedPosition;
+	private Date date;
+	private String title;
+	private String resume;
+	private String companyName;
+	private String  role;
+
+	private String status;
+	private String position;
+	private String  mobile;
+	
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public Set<VoterData> getVoterDataSet() {
+		return voterDataSet;
+	}
+
+	public void setVoterDataSet(Set<VoterData> voterDataSet) {
+		this.voterDataSet = voterDataSet;
+	}
+
 	String addressStr;
+	String location;
 	//Address address;
 	
 	@OneToMany(mappedBy = "candidateData",  fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -49,13 +80,13 @@ public class CandidateData {
 		
 	}
 	
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
 
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -202,9 +233,33 @@ public class CandidateData {
 	public void setAddressStr(String addressStr) {
 		this.addressStr = addressStr;
 	}
+	
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
 
 
+	public String getMobile() {
+		return mobile;
+	}
 
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
 //	public Address getAddress() {
 //		return address;
 //	}
@@ -214,9 +269,6 @@ public class CandidateData {
 //	public void setAddress(Address address) {
 //		this.address = address;
 //	}
-
-
-
 
 
 }
