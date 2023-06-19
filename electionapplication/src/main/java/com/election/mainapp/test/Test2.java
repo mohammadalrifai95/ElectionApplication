@@ -1,4 +1,4 @@
-package com.election.mainapp;
+package com.election.mainapp.test;
 
 public class Test2 {
 

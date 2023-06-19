@@ -1,11 +1,11 @@
 package com.election.mainapp.voting.data;
 
-import com.election.mainapp.voting.dependency.*;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -15,7 +15,7 @@ public class VoterData {
 
 	@Id 
     @GeneratedValue( strategy=GenerationType.AUTO )
-	private int id;
+	private Integer id;
 	private int ssn;
 	private String idCard;
 	private String nameStr;
@@ -25,6 +25,7 @@ public class VoterData {
 	private String ageProof;
 	
 	@ManyToOne	   
+	@JoinColumn(name = "candidate_id") 
 	private CandidateData candidateData; 
 	
 	public VoterData() {
@@ -87,10 +88,10 @@ public class VoterData {
 	public void setAgeProof(String ageProof) {
 		this.ageProof = ageProof;
 	}
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

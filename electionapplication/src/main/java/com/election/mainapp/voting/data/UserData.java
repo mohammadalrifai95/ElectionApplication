@@ -12,9 +12,11 @@ public class UserData {
 
 	@Id 
     @GeneratedValue( strategy=GenerationType.AUTO )
-	 private int id;
+	 private Integer id;
 
      private String userName;
+     
+     private String  password;
 
      private String  Name;
      
@@ -28,17 +30,15 @@ public class UserData {
 
      private String  mobile;
 
-     private String  password;
-
-     public int getId() {
+ 
+     public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
-
- 
+	
 
 	public String getUserName() {
 		return userName;

@@ -12,6 +12,7 @@ import com.election.mainapp.voting.dependency.Address;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -25,7 +26,7 @@ public class CandidateData {
 
 	@Id 
 	@GeneratedValue( strategy=GenerationType.AUTO )	
-	private int id;
+	private Integer id;
 	private String ssn;
 	private String name;
 	private String firstName;
@@ -39,9 +40,89 @@ public class CandidateData {
 	private String companyName;
 	private String  role;
 
-	private String status;
+	
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
 	private String position;
 	private String  mobile;
+	private String  gender;
+	private String status;
+	private String  year;
+	private String  electoralListNumber;
+	private String  electoralListName;
+	
+	
+	
+	public String getElectoralListNumber() {
+		return electoralListNumber;
+	}
+
+	public void setElectoralListNumber(String electoralListNumber) {
+		this.electoralListNumber = electoralListNumber;
+	}
+
+	public String getElectoralListName() {
+		return electoralListName;
+	}
+
+	public void setElectoralListName(String electoralListName) {
+		this.electoralListName = electoralListName;
+	}
+
+	public String getYear() {
+		return year;
+	}
+
+	public void setYear(String year) {
+		this.year = year;
+	}
+
+	public ConstituencyData getConstituencyData() {
+		return constituencyData;
+	}
+
+	public void setConstituencyData(ConstituencyData constituencyData) {
+		this.constituencyData = constituencyData;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)	   
+	@JoinColumn(name = "constituency_id") 
+	private ConstituencyData constituencyData;
+
+
+	String addressStr;
+	String location;
+	//Address address;
+	
+	@OneToMany(mappedBy = "candidateData",  fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	Set<VoterData> voterDataSet;
+	
+	public CandidateData() {
+		
+		voterDataSet = new HashSet<VoterData>();
+		
+	}
+	
+	public Integer getId() {
+		return id;
+	}
+
+
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	
+	
+	
+	
 	
 	public String getFirstName() {
 		return firstName;
@@ -66,30 +147,6 @@ public class CandidateData {
 	public void setVoterDataSet(Set<VoterData> voterDataSet) {
 		this.voterDataSet = voterDataSet;
 	}
-
-	String addressStr;
-	String location;
-	//Address address;
-	
-	@OneToMany(mappedBy = "candidateData",  fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	Set<VoterData> voterDataSet;
-	
-	public CandidateData() {
-		
-		voterDataSet = new HashSet<VoterData>();
-		
-	}
-	
-	public int getId() {
-		return id;
-	}
-
-
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
 
 
 	public String getSsn() {
