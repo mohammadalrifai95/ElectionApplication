@@ -163,7 +163,7 @@ input {
 	
 	<!-- -----------------------------------------Login Part------------------------------------------------------------------------------------------------------------------- -->
 		<div id="loginDiv" style="margin-top: 50px;">
-			<form action="Login">
+			<form action="login">
 				 <label class="label">User Name:<input class="input" type="text" name="userName"  id="userName" value=""  /></label> 
 				 <label class="label">Password:<input class="input" type="password" name="password"  id="password" value=""  style="margin-left: 1%;" /></label> 
 				 <label class="label"><input type="submit" value="Login" id="Login" name="Login" class="button"></label> 

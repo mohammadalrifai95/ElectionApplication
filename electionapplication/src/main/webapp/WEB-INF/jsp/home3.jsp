@@ -198,7 +198,7 @@ body {
 	<p id="depratmentDesc1"></p>
 </div>
 
-<!-- <a href="Login?id=17&name=fred"  style="width: 30%; float:left;"> -->
+<!-- <a href="login?id=17&name=fred"  style="width: 30%; float:left;"> -->
 <a href="home2"  style="width: 30%; float:left;">
 <button>back</button>
 </a>

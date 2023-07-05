@@ -91,7 +91,7 @@ li a:hover:not(.active) {
 
 <ul style="width: 200px;">
 	<li style="margin-bottom: 50px; ">
-		<a class="active" style="" href="/Login?alredyLoggedin=Yes" >
+		<a class="active" style="" href="/login?alredyLoggedin=Yes" >
 			Home
 		</a>
 	</li>
@@ -101,7 +101,7 @@ li a:hover:not(.active) {
 		</a>
 <!-- 	</li> -->
 	 <li style="width: 200px; height: 50px; margin-top: 420px;">  	 
-		<a href="/Login?alredyLoggedin=Yes" class="active" style="background-color: black">  
+		<a href="/login?alredyLoggedin=Yes" class="active" style="background-color: black">  
 			back 
 		</a>
 	</li>

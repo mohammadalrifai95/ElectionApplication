@@ -188,7 +188,7 @@ li a:hover:not(.active) {
         <br />
     </c:when>    
     <c:otherwise>
-	 <h2 style="margin-left: 600px;">Hello Election Application</h2>           
+	 <h2 style="margin-left: 600px;">Hello Election Application This is Admin page</h2>           
         <br />
     </c:otherwise>
 </c:choose>

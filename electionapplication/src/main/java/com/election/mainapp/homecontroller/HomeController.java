@@ -2,6 +2,7 @@ package com.election.mainapp.homecontroller;
 
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -12,6 +13,7 @@ import java.util.Optional;
 import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +21,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.client.RestTemplate;
 
 
@@ -32,6 +37,7 @@ import com.election.mainapp.voting.serviceI.GenericServiceI;
 //import ch.qos.logback.classic.Logger;
 import java.util.logging.Logger;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.mail.Session;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -42,10 +48,12 @@ import com.election.mainapp.constant.GlobalMessage_AR;
 import com.election.mainapp.generic.StringUtility;
 import com.election.mainapp.generic.interfaces.FooExtendedI;
 import com.election.mainapp.voting.data.AreaData;
-
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 
 @Controller
+//@EnableWebMvc
 public class HomeController {
 
 	@Autowired
@@ -54,8 +62,15 @@ public class HomeController {
 	@Autowired
 	GenericServiceI genericService;
 	
+	
+	@ResponseBody 
+//	@PreAuthorize("hasAuthority('ROLE_ADMIN')") 
+//	@PreAuthorize("hasAuthority('ROLE_ADMIN')  or hasAuthority('ROLE_USER') ") 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String login(HttpServletRequest request) {
+		
+		getAuthority(); 
+		
 		
 		  populateListOfCountry(request);
 		  String selectedLanguageJsp = returnLanguageSelected(request);
@@ -63,6 +78,141 @@ public class HomeController {
 		return selectedLanguageJsp;
 //		return "login";
 	}
+
+//	@ResponseBody 
+	//@PreAuthorize("hasAuthority('ROLE_ADMIN')  or hasAuthority('ROLE_USER') ")
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public ModelAndView AtemptingOfLogin(UserData usrdta, HttpServletRequest request,  String ... alredyLoggedin) {
+		
+		logger.info("This is my first log4j's statement");
+		HttpSession session = request.getSession();
+	     if(StringUtility.isNotEmpty((String)request.getParameter("alredyLoggedin")) || 
+	    		(alredyLoggedin != null && StringUtility.isNotEmpty(alredyLoggedin[0]) 
+	    		&& alredyLoggedin[0].equals("Yes"))) {
+	    	 
+	    	  
+	    	 
+	    	 usrdta.setUserName((String)session.getAttribute("usenName") );
+	    	 usrdta.setPassword((String)session.getAttribute("password"));
+	     }
+
+	     ModelAndView mv= new ModelAndView();
+	     //HttpSession session = request.getSession();
+	     
+	     String language_selected = GlobalConstant.EMPTY_STRING[0]; 
+	     if(session != null && session.getAttribute(GlobalConstant.LAUNGAUE_SMALL_LETTER) != null)
+	     language_selected = (String)session.getAttribute(GlobalConstant.LAUNGAUE_SMALL_LETTER);
+	     
+//			if(StringUtility.isNotEmpty(language)) {
+//				session.setAttribute(GlobalConstant.LAUNGAUE_SMALL_LETTER, language);				
+//			}else {
+//				session.setAttribute(GlobalConstant.LAUNGAUE_SMALL_LETTER, GlobalConstant.LAUNGAUE_ENGLISH);
+//			}
+			mv.addObject(GlobalConstant.LAUNGAUE_SMALL_LETTER, language_selected);
+			String returnPage = "login";
+			if(language_selected.equals(GlobalConstant.LAUNGAUE_ENGLISH)) {
+				returnPage="login";
+			}else{
+				returnPage="login_arabic";
+			}
+	     
+			lambdaExpressionTest();
+		
+		UserData userData = null;
+		if(alredyLoggedin == null) {
+		//mv.addObject("errorLoginMessage", "");
+		
+		if(StringUtility.isEmpty(usrdta.getUserName()) || StringUtility.isEmpty(usrdta.getPassword()) ) {
+			//Username and password left empty
+			//session.getAttribute(GlobalConstant.LAUNGAUE_SMALL_LETTER);
+			mv.setViewName(returnPage);
+			if(language_selected.equals(GlobalConstant.LAUNGAUE_ENGLISH)) {
+				mv.addObject("errorLoginMessage", "Please enter Username and Password");
+			}else{
+				mv.addObject("errorLoginMessage", GlobalMessage_AR.EMPTY_USER_PASS_MESSAGE_AR);
+			}
+			
+			return mv;
+		}
+		
+		
+		userData = genericService.findUser(usrdta);
+		if(userData == null ) {
+			//Incorrect user and pass entered
+			mv.setViewName(returnPage);
+			if(language_selected.equals(GlobalConstant.LAUNGAUE_ENGLISH)) {
+				mv.addObject("errorLoginMessage", "Username or password is incorrect, Please enter valid username and password");
+			}else{
+				mv.addObject("errorLoginMessage", GlobalMessage_AR.WRONG_USER_PASS_MESSAGE_AR);
+			}
+			
+		}
+		else {
+			session.setAttribute("usenName", userData.getUserName());
+			session.setAttribute("password", userData.getPassword());
+			
+			populateListOfCountry(request);
+			populateListOfCity(mv);
+			
+			mv.setViewName("home2");
+		}
+		
+		}else {
+			System.out.println(session.getAttribute("usenName"));
+			populateListOfCountry(request);
+			populateListOfCity(mv);
+			mv.setViewName("home2");
+		}
+		
+		if(userData!=null) {
+			//consumeRestAPIUsingRestTemplateTest(userData); 			
+		}
+		
+		return mv;
+	}
+	
+	
+	@ResponseBody 
+//	@PreAuthorize("hasAuthority('ROLE_ADMIN')  or hasAuthority('ROLE_USER') ")	
+	@RequestMapping(value = "/home", method = RequestMethod.GET)
+	public String home(HttpServletRequest request) {
+		
+		//getAuthority();
+		
+		//populateListOfCountry(request);
+		
+		return "home2";
+	}
+	
+//	@RolesAllowed("ROLE_ADMIN")
+//	@PreAuthorize("hasAuthority('ROLE_ADMIN')  or hasAuthority('ROLE_USER') ")
+	@ResponseBody  
+	@PreAuthorize("hasAuthority('ROLE_ADMIN') ") 
+	@RequestMapping(value = "/admin", method = RequestMethod.GET)
+	public String admin(HttpServletRequest request) {
+		
+		getAuthority();
+		//populateListOfCountry(request);
+	   //String selectedLanguageJsp = returnLanguageSelected(request);
+			
+		return "admin";
+	}
+	
+	
+//	@RolesAllowed("ROLE_ADMIN")
+	@ResponseBody 
+	@PreAuthorize("hasAuthority('ROLE_USER') ")     
+	@RequestMapping(value = "/user", method = RequestMethod.GET)
+	public String getUser(HttpServletRequest request) {
+		
+		//getAuthority();
+		//populateListOfCountry(request);
+		//String selectedLanguageJsp = returnLanguageSelected(request);
+		
+		return "user";
+	}	
+	
+	
 	
 	
 	@RequestMapping(value = "/languageChanged", method = RequestMethod.GET)
@@ -167,99 +317,25 @@ public class HomeController {
 		mfI.print();
 	}
 	
-	
-	
-	@RequestMapping(value = "/Login", method = RequestMethod.GET)
-	public ModelAndView AtemptingOfLogin(UserData usrdta, HttpServletRequest request,  String ... alredyLoggedin) {
-		
-		logger.info("This is my first log4j's statement");
-		HttpSession session = request.getSession();
-	     if(StringUtility.isNotEmpty((String)request.getParameter("alredyLoggedin")) || 
-	    		(alredyLoggedin != null && StringUtility.isNotEmpty(alredyLoggedin[0]) 
-	    		&& alredyLoggedin[0].equals("Yes"))) {
-	    	 
-	    	  
-	    	 
-	    	 usrdta.setUserName((String)session.getAttribute("usenName") );
-	    	 usrdta.setPassword((String)session.getAttribute("password"));
-	     }
 
-	     ModelAndView mv= new ModelAndView();
-	     //HttpSession session = request.getSession();
-	     
-	     String language_selected = GlobalConstant.EMPTY_STRING[0]; 
-	     if(session != null && session.getAttribute(GlobalConstant.LAUNGAUE_SMALL_LETTER) != null)
-	     language_selected = (String)session.getAttribute(GlobalConstant.LAUNGAUE_SMALL_LETTER);
-	     
-//			if(StringUtility.isNotEmpty(language)) {
-//				session.setAttribute(GlobalConstant.LAUNGAUE_SMALL_LETTER, language);				
-//			}else {
-//				session.setAttribute(GlobalConstant.LAUNGAUE_SMALL_LETTER, GlobalConstant.LAUNGAUE_ENGLISH);
-//			}
-			mv.addObject(GlobalConstant.LAUNGAUE_SMALL_LETTER, language_selected);
-			String returnPage = "login";
-			if(language_selected.equals(GlobalConstant.LAUNGAUE_ENGLISH)) {
-				returnPage="login";
-			}else{
-				returnPage="login_arabic";
-			}
-	     
-			lambdaExpressionTest();
-		
-		UserData userData = null;
-		if(alredyLoggedin == null) {
-		//mv.addObject("errorLoginMessage", "");
-		
-		if(StringUtility.isEmpty(usrdta.getUserName()) || StringUtility.isEmpty(usrdta.getPassword()) ) {
-			//Username and password left empty
-			//session.getAttribute(GlobalConstant.LAUNGAUE_SMALL_LETTER);
-			mv.setViewName(returnPage);
-			if(language_selected.equals(GlobalConstant.LAUNGAUE_ENGLISH)) {
-				mv.addObject("errorLoginMessage", "Please enter Username and Password");
-			}else{
-				mv.addObject("errorLoginMessage", GlobalMessage_AR.EMPTY_USER_PASS_MESSAGE_AR);
-			}
-			
-			return mv;
-		}
-		
-		
-		userData = genericService.findUser(usrdta);
-		if(userData == null ) {
-			//Incorrect user and pass entered
-			mv.setViewName(returnPage);
-			if(language_selected.equals(GlobalConstant.LAUNGAUE_ENGLISH)) {
-				mv.addObject("errorLoginMessage", "Username or password is incorrect, Please enter valid username and password");
-			}else{
-				mv.addObject("errorLoginMessage", GlobalMessage_AR.WRONG_USER_PASS_MESSAGE_AR);
-			}
-			
-		}
-		else {
-			session.setAttribute("usenName", userData.getUserName());
-			session.setAttribute("password", userData.getPassword());
-			
-			populateListOfCountry(request);
-			populateListOfCity(mv);
-			
-			mv.setViewName("home2");
-		}
-		
-		}else {
-			System.out.println(session.getAttribute("usenName"));
-			populateListOfCountry(request);
-			populateListOfCity(mv);
-			mv.setViewName("home2");
-		}
-		
-		if(userData!=null) {
-			consumeRestAPIUsingRestTemplateTest(userData);			
-		}
-		
-		
-		return mv;
-	}
 	
+ 
+	
+	
+	
+	//@RolesAllowed("ROLE_USER")
+	//@ResponseBody
+//	@PreAuthorize("hasAuthority('ROLE_USER') ") 
+//	@RequestMapping(value = "/user", method = RequestMethod.GET)
+//	public String user(HttpServletRequest request) {
+//		
+//		//getAuthority();
+//		
+//		//populateListOfCountry(request);
+//		//String selectedLanguageJsp = returnLanguageSelected(request);
+//
+//		return "user";	
+//	}
 	
 
 	
@@ -579,9 +655,6 @@ public class HomeController {
 	
 	
 	
-//	@RequestMapping("/getCandidateByAre")
-//	@ResponseBody
-//	public String getCandidateByAre(@RequestParam int areId, HttpRequest request) {
 	private List<String> populateListAsString(int areId) {
 		
 		System.out.println("Are id = "+ areId);
@@ -765,5 +838,28 @@ public class HomeController {
 	}
 	
 	
+	
+	
+	@GetMapping(value = "/candidacyconditions")
+	public ModelAndView  redirectToCandidacyConditions() {
+		
+		ModelAndView  mv = new ModelAndView();
+		
+		mv.setViewName("candidacyconditions");
+		
+		return mv ; 
+	}
+ 
+	
+	
+
+	private void getAuthority() {
+		Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>)SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+
+		for (Iterator iterator = authorities.iterator(); iterator.hasNext();) {
+			SimpleGrantedAuthority simpleGrantedAuthority = (SimpleGrantedAuthority) iterator.next();
+			System.out.println(simpleGrantedAuthority.getAuthority());  
+		}
+	}
 }
 

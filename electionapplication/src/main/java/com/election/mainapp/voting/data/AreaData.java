@@ -10,6 +10,9 @@ public class AreaData {
 
 	public AreaData() {
 		
+		//GenericDateAndTimeData genericDateAndTimeData = new GenericDateAndTimeData();
+		//genericDateAndTimeData.getId();
+		
 		
 	}
 

@@ -55,17 +55,17 @@ li a:hover:not(.active) {
 <body>
 <ul style="width: 200px;">
 	<li style="margin-bottom: 50px; ">
-		<a class="active" style="" href="/Login?alredyLoggedin=Yes" >
+		<a class="active" style="" href="/login?alredyLoggedin=Yes" >
 			Home
 		</a>
 	</li>
 	 <li style="width: 200px; height: 30px; margin-top: 490px; background-color: black;">   	 
 			<c:choose>
 					<c:when test="${PreviousPage == 'home2'}"> 
-			 		<a href="/Login?alredyLoggedin=Yes" class="active" style="background-color: black" class="active">Back</a> 
+			 		<a href="/login?alredyLoggedin=Yes" class="active" style="background-color: black" class="active">Back</a> 
 	   			 </c:when>
 	   			 <c:otherwise>
-			 		<a href="/previousPage" class="active" style="background-color: black">Back</a>
+			 		<a href="/login?alredyLoggedin=Yes" class="active" style="background-color: black">Back</a>
 	   			 </c:otherwise> 
 			</c:choose>
 	</li>

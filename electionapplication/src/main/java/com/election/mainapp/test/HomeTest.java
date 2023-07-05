@@ -2,7 +2,7 @@ package com.election.mainapp.test;
 
 import java.util.Iterator;
 
-public class HomeTest {
+public class HomeTest implements TestI {
 
 	public HomeTest() {
 		// TODO Auto-generated constructor stub

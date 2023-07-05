@@ -2,6 +2,8 @@ package com.election.mainapp.voting.data;
 
 import java.util.Set;
 
+import com.election.mainapp.generic.interfaces.GenericDateAndTimeDataI;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -10,10 +12,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "T_COUNTRY")
-public class CountryData {
+public class CountryData implements GenericDateAndTimeDataI{
 
 	
 	public CountryData() {
@@ -26,7 +30,7 @@ public class CountryData {
 	private String name;
 	private String arabicName;
 	private String countryCode;
-	
+	private GenericDateAndTimeData genericDateAndTimeData; 
 	
 	
 	

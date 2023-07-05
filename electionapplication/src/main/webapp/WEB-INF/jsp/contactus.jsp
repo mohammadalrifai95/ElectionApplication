@@ -99,7 +99,7 @@ li a:hover:not(.active) {
   <li><a href="#news" onclick="addVoter()" id="AddvoterMenuLink">Add voter</a></li>
   <li><a href="#contact">Contact</a></li>
   <li><a href="#about">About</a></li>
-  <li style="margin-top: 400px;" ><a href="Login?alredyLoggedin=Yes" class="active" style="background-color: black">Back</a></li>
+  <li style="margin-top: 400px;" ><a href="login?alredyLoggedin=Yes" class="active" style="background-color: black">Back</a></li>
 </ul>
 
 <div >
@@ -205,7 +205,7 @@ li a:hover:not(.active) {
 	</div>
 
 	<div style=" margin-left: 360px;"   id="backbutton" >
-	<form action="Login" method="get">
+	<form action="login" method="get">
 	    <input type="text" name="alredyLoggedin" value="Yes" style="display:none;"/><br>
 	  <input type="submit" class="styled" value="Back" style="background-color: black; color: white;">
 	</form>

@@ -185,7 +185,7 @@ label  {
 	<!-- -----------------------------------------Login Part------------------------------------------------------------------------------------------------------------------- -->
 	
 		<div id="loginDiv" style="margin-top: 20px;">
-			<form action="Login">
+			<form action="login">
 				<label class="label">«”„ «·„” Œœ„:</label>
 				 <label class="label"><input class="input" type="text" name="userName"  id="userName" value="" /></label>
 				 <label class="label"> ﬂ·„… «·„—Ê—:</label> 

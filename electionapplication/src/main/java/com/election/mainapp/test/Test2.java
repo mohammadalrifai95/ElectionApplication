@@ -1,6 +1,6 @@
 package com.election.mainapp.test;
 
-public class Test2 {
+public class Test2 implements TestI{
 
 	public Test2() {
 		// TODO Auto-generated constructor stub
