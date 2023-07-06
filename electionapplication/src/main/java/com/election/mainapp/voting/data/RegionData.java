@@ -12,9 +12,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.Data;
 
 @Entity
 @Table(name = "T_REGION")
+@Data
 public class RegionData {
 
 	public RegionData() {
@@ -29,7 +31,7 @@ public class RegionData {
 	@JoinColumn(name = "constituency_id")
 	private ConstituencyData constituencyData; 
 	
-	
+	private GenericDateAndTimeData genericDateAndTimeData;
 	
 	
 	

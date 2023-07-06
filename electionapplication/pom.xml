@@ -176,8 +176,7 @@
 
 			<dependency>
 			    <groupId>org.apache.tomcat.embed</groupId>
-			    <artifactId>
-				tomcat-embed-jasper</artifactId>
+			    <artifactId>tomcat-embed-jasper</artifactId>
 			    <scope>provided</scope>
 			</dependency>			
 			
@@ -257,7 +256,15 @@
 <!--FOR SPRING SECURITY ENDS-->
 
 
+<!--FOR spring boot thymeleaf START ______________________________________________-->
 
+<!--thymeleaf provide rendering engine whcih let SP know there is a template to be rendered and mapped-->
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-starter-thymeleaf</artifactId>-->
+<!--		</dependency>-->
+		
+<!--FOR thymeleaf ENDS ***********************************************-->  
 
 
 

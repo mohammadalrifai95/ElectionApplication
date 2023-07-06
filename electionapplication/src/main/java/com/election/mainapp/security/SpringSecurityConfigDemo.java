@@ -49,9 +49,29 @@ public class SpringSecurityConfigDemo {
 //	}
 	
 	
+	
 	//we use UserDetailsService method instead of configure(AuthenticationManagerBuilder auth)
 //	  @Bean
 //	  public UserDetailsService userDetailsService() {
+
+	
+	
+		//	UserDetails admin = User.withUsername("admin")
+		//	.password("admin")
+		//	.roles("ADMIN")
+		//	.build();
+		//
+		//UserDetails user = User.withUsername("user")
+		//		.password("user")
+		//		.roles("USER") 
+		//		.build();
+		//
+		//return new InMemoryUserDetailsManager(admin, user);
+		//	UserDetailsService userDetailsServiceImpl = new  UserDetailsServiceImpl(); 
+	
+	
+	
+	
 //		  AuthenticationManagerBuilder auth;
 		  
 //		  auth.inMemoryAuthentication()
@@ -240,6 +260,237 @@ public class SpringSecurityConfigDemo {
 //		}
 //  
 
+	
+	
+	//Authentication
+//	@Bean
+//	public UserDetailsService userDetailsService() {
+//		
+//		
+//		UserDetails admin = User.withUsername("admin")
+//				.password("admin")
+//				.roles("ADMIN")
+//				.build();
+//		
+//	
+//		UserDetails user = User.withUsername("user")
+//				.password("user")
+//				.roles("USER") 
+//				.build();
+//		
+//		
+//		return new InMemoryUserDetailsManager(admin, user);
+//		
+////	  return new  UserDetailsServiceImpl();   
+//	}
+	
+//	@Bean 
+//	public  InMemoryUserDetailsManager userDetailsService2() {
+//		
+//		UserDetails admin = User.withUsername("admin")
+//				.password("admin")
+//				.roles("ADMIN")
+//				.build();
+//		
+//	
+////		UserDetails user = User.withUsername("user")
+////				.password("user")
+////				.roles("USER") 
+////				.build();
+//		
+//		return new InMemoryUserDetailsManager(admin);
+//		
+//	}
+//	
+//	@Bean 
+//	public SecurityFilterChain SecurityFilterChain(HttpSecurity http) throws Exception {
+//		
+//		http.authorizeHttpRequests((authz) -> authz 
+//				.requestMatchers("admin") 
+////				.anyRequest() 
+//				.authenticated()
+//				)
+//				.httpBasic();
+//
+//		
+//		return http.build();
+//		
+//	}
+//	
+	
+
     
+//	  @Bean 
+//	  public PasswordEncoder getPassEncoded() { 
+//		  return NoOpPasswordEncoder.getInstance();
+		  
+//		  return new BCryptPasswordEncoder(); 
+//	  }
+
+//    @Override    
+//    protected void configure(HttpSecurity http) throws Exception {    
+//          
+//	      http.authorizeRequests().  
+//	      requestMatchers("/home", "/login", "/Login", "/").permitAll()      
+//	      .requestMatchers("/admin").hasRole("ADMIN")     
+//	      .requestMatchers("/user").hasRole("USER")   
+//	      .and()  
+//	      .formLogin()  ; 
+//	      .loginPage("/login")  
+//	      .and()  
+//	      .logout()  
+//	      .logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
+//	      
+//    }   
+	
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//    	http
+//    		.formLogin(form -> form
+//    			.loginPage("/login")
+//    			.permitAll()
+//    		);
+//    	// ...
+//    }
     
+	  //let Spring Security allow the use for hasPermission in the JSP page?
+//	  protected Class<?>[] getRootConfigClasses() {
+//		    return new Class[] {
+//		    		SpringSecurityConfigurer.class,
+//		    };
+//		  }
+
+	  
+	  
+    
+	//Authorization
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    			
+//  		http
+//		  .csrf().disable()
+//		  .authorizeHttpRequests()
+//		  .requestMatchers("/", "/home").permitAll()//do not authenticate it(do not show login page)
+//		  .and()
+//		  .authorizeHttpRequests()
+//		  .requestMatchers("/admin").hasRole("ADMIN")
+//		  .and()
+//		  .authorizeHttpRequests()
+//		  .requestMatchers("/user").hasRole("USER")  
+//		  .and()
+//		  .formLogin()
+//		  ; 
+//	      
+//	      return http.build();
+    	
+//    	http
+//		.authorizeHttpRequests((requests) -> requests
+//			.anyRequest().authenticated()
+//		)
+//		.httpBasic(Customizer.withDefaults())
+//		.formLogin(Customizer.withDefaults());
+//	return http.build();	
+//	      
+//	  }
+	  
+	  
+//	  @Bean
+//	  @Order(1) 
+//	  SecurityFilterChain SecurityFilterChainOrder1(HttpSecurity http) throws Exception {
+//	  	http
+//	  		.authorizeHttpRequests((authorize) -> authorize
+//	  			.requestMatchers("/", "/login", "/home").permitAll()
+//	  			.requestMatchers("/admin").hasRole("ADMIN")
+//	  			.requestMatchers("/user").hasRole("USER") 
+//	  			.anyRequest().authenticated()
+//	  		);
+//
+//	  	return http.build();
+//	  }
+
+	  
+//	  @Bean
+//	  @Order(2) 
+//	  SecurityFilterChain SecurityFilterChainOrder2(HttpSecurity http) throws Exception {
+//		  http
+//		  .authorizeHttpRequests((authorize) -> authorize
+//				  .requestMatchers("/admin").permitAll()//hasAuthority("ROLE_ADMIN")  
+//				  .anyRequest().authenticated()
+//				  );
+//		  
+//		  return http.build();
+//	  }
+
+	  
+//	  @Bean
+//	  @Order(3) 
+//	  SecurityFilterChain SecurityFilterChainOrder3(HttpSecurity http) throws Exception {
+//		  http
+//		  .authorizeHttpRequests((authorize) -> authorize
+//				  .requestMatchers("/user").permitAll()//hasAuthority("ROLE_USER")
+//				  .anyRequest().authenticated()
+//				  );
+//		  
+//		  return http.build();
+//	  }
+    
+
+//	@Bean
+//	protected void Configure(HttpSecurity http) throws Exception{
+//		
+//		http.authorizeRequests()
+//		.anyRequest().authenticated()
+//		.and()
+//		.formLogin()
+//		.loginPage("/login")
+//		.permitAll();
+//		
+//	}
+	
+    
+//  @Bean
+//  public InternalResourceViewResolver jspViewResolver(){
+//      final InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+//      //viewResolver.setViewClass(JstlView.class);
+//      viewResolver.setPrefix("/WEB-INF/jsp/");
+//      viewResolver.setSuffix(".jsp");
+//      //viewResolver.setViewNames("jsp/*");
+//      return viewResolver;
+//  }
+  
+//  @Resource
+//  protected SpringTemplateEngine springTemplateEngine;
+//  
+//  @Bean
+//  public ThymeleafViewResolver thymeleafViewResolver(){
+//      final ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
+//      //viewResolver.setViewNames(new String[] {"thyme/*"});
+//      //viewResolver.setExcludedViewNames(new String[] {"jsp/*"});
+//      viewResolver.setTemplateEngine(springTemplateEngine);
+//      viewResolver.setCharacterEncoding("UTF-8");
+//      return viewResolver;
+//  }
+	
+	//Authorization
+//	  @Bean
+//	  SecurityFilterChain SecurityFilterChainOrder1(HttpSecurity http) throws Exception {
+
+
+	
+//	  return 
+//	  http.csrf().disable()
+//	  	.authorizeHttpRequests()
+//	  	.requestMatchers("/" ).authenticated() 
+//	  	.and()
+//	  	.authorizeHttpRequests()
+//	  	.requestMatchers( "/home", "/login").permitAll() 
+//	  	.and()
+//	  	
+//	  	.authorizeHttpRequests()
+//	  	.requestMatchers("/admin", "/user").authenticated() 
+//	  	.and().formLogin()
+//	  	.and().build();
+	
+//}
+
+
 }

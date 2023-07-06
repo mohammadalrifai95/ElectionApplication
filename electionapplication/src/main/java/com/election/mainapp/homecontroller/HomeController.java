@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -63,10 +65,13 @@ public class HomeController {
 	GenericServiceI genericService;
 	
 	
-	@ResponseBody 
-//	@PreAuthorize("hasAuthority('ROLE_ADMIN')") 
-//	@PreAuthorize("hasAuthority('ROLE_ADMIN')  or hasAuthority('ROLE_USER') ") 
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	 
+	//@PreAuthorize("hasAuthority('ROLE_ADMIN')") 
+	//@RequestMapping(value = "/", method = RequestMethod.GET)
+	//@RequestMapping(value = "/login", method = RequestMethod.GET)  
+	//@ResponseBody
+//	@PreAuthorize("hasAuthority('ROLE_ADMIN')  or hasAuthority('ROLE_USER') ")
+	@GetMapping(value = "/")
 	public String login(HttpServletRequest request) {
 		
 		getAuthority(); 
@@ -75,14 +80,39 @@ public class HomeController {
 		  populateListOfCountry(request);
 		  String selectedLanguageJsp = returnLanguageSelected(request);
 			
-		return selectedLanguageJsp;
-//		return "login";
+//		return selectedLanguageJsp;
+		return "login";  
 	}
+	
+//	@GetMapping(value = "/login")
+//	public String loginPage(UserData usrdta, HttpServletRequest request,  String ... alredyLoggedin) { 
+//		
+//		getAuthority(); 
+//		
+//		
+//		populateListOfCountry(request);
+//		String selectedLanguageJsp = returnLanguageSelected(request);
+//		
+////		return selectedLanguageJsp;
+//		return "login";  
+//	}
 
 //	@ResponseBody 
 	//@PreAuthorize("hasAuthority('ROLE_ADMIN')  or hasAuthority('ROLE_USER') ")
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public ModelAndView AtemptingOfLogin(UserData usrdta, HttpServletRequest request,  String ... alredyLoggedin) {
+	//@PreAuthorize("hasAuthority('ROLE_ADMIN')  or hasAuthority('ROLE_USER') ")
+	@GetMapping (value = "/login")   
+	//public ModelAndView login(@RequestParam("userName")  String userName, @RequestParam("password") String password , HttpServletRequest request,  String ... alredyLoggedin) {
+		public ModelAndView login(UserData usrdta, HttpServletRequest request,  String ... alredyLoggedin) {
+		
+//		usrdta.setUserName("admin");
+//		usrdta.setPassword("admin");
+//		UserData usrdta = null;
+//		if(StringUtility.isNoneEmpty(userName) && StringUtility.isNoneEmpty(password) ) {
+//			usrdta = new UserData();
+//			usrdta.setUserName(userName);
+//			usrdta.setPassword(password);
+//		}
+		
 		
 		logger.info("This is my first log4j's statement");
 		HttpSession session = request.getSession();
@@ -113,10 +143,11 @@ public class HomeController {
 			if(language_selected.equals(GlobalConstant.LAUNGAUE_ENGLISH)) {
 				returnPage="login";
 			}else{
-				returnPage="login_arabic";
+				returnPage="login";
+				//returnPage="login_arabic"; 
 			}
 	     
-			lambdaExpressionTest();
+			//lambdaExpressionTest();
 		
 		UserData userData = null;
 		if(alredyLoggedin == null) {
@@ -172,7 +203,7 @@ public class HomeController {
 	}
 	
 	
-	@ResponseBody 
+//	@ResponseBody   
 //	@PreAuthorize("hasAuthority('ROLE_ADMIN')  or hasAuthority('ROLE_USER') ")	
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
 	public String home(HttpServletRequest request) {
@@ -186,7 +217,7 @@ public class HomeController {
 	
 //	@RolesAllowed("ROLE_ADMIN")
 //	@PreAuthorize("hasAuthority('ROLE_ADMIN')  or hasAuthority('ROLE_USER') ")
-	@ResponseBody  
+//	@ResponseBody   
 	@PreAuthorize("hasAuthority('ROLE_ADMIN') ") 
 	@RequestMapping(value = "/admin", method = RequestMethod.GET)
 	public String admin(HttpServletRequest request) {
@@ -200,7 +231,7 @@ public class HomeController {
 	
 	
 //	@RolesAllowed("ROLE_ADMIN")
-	@ResponseBody 
+//	@ResponseBody 
 	@PreAuthorize("hasAuthority('ROLE_USER') ")     
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
 	public String getUser(HttpServletRequest request) {

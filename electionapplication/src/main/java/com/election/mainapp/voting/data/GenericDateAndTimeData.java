@@ -27,7 +27,7 @@ public  class GenericDateAndTimeData implements Serializable{
 //	private Long id; 
 	
 	//@Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TS", nullable = false)
+    @Column(name = "CREATED_TS", nullable = true)
     //@CreatedDate
     private  Date createdTs;
 //    private  LocalDateTime  createdTs;
@@ -41,7 +41,7 @@ public  class GenericDateAndTimeData implements Serializable{
 	private  String createdBy;
     
     
-    @Column(name = "UPDATED_TS", nullable = false)
+    @Column(name = "UPDATED_TS", nullable = true) 
     //@LastModifiedDate 
     private  Date updatedTs;
 //    private  LocalDateTime updatedTs; 

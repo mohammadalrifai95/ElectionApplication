@@ -1,6 +1,7 @@
 package com.election.mainapp.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -25,9 +26,16 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.AnyRequestMatcher;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.view.JstlView;
+//import org.thymeleaf.spring6.SpringTemplateEngine;
+//import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
+//import org.thymeleaf.spring6.view.ThymeleafViewResolver;
+//import org.thymeleaf.templatemode.TemplateMode;
 
 import com.election.mainapp.voting.daoI.UserDaoI;
 
+import jakarta.annotation.Resource;
 import jakarta.websocket.Encoder;
 
 
@@ -50,30 +58,13 @@ public class SpringSecurityConfigurer extends AbstractSecurityWebApplicationInit
 		// TODO Auto-generated constructor stub
 	}
 	
-
 	
 	//Authentication
 	@Bean
 	public UserDetailsService userDetailsService() {
 		
-//		UserDetails admin = User.withUsername("admin")
-//		.password("admin")
-//		.roles("ADMIN")
-//		.build();
-//
-//	
-//	UserDetails user = User.withUsername("user")
-//			.password("user")
-//			.roles("USER") 
-//			.build();
-//	
-//	
-//	return new InMemoryUserDetailsManager(admin, user);
-//		UserDetailsService userDetailsServiceImpl = new  UserDetailsServiceImpl();  
-		
 		
 		return userDetailsServiceImpl;
-		
 		
 	}
 	
@@ -88,193 +79,55 @@ public class SpringSecurityConfigurer extends AbstractSecurityWebApplicationInit
 	
 
 	//Authorization
+//	  @Bean
+//	  SecurityFilterChain SecurityFilterChainOrder1(HttpSecurity http) throws Exception {
+//
+//		   
+//	 
+//		  
+//		  http.csrf().disable()
+//		  	.authorizeHttpRequests()
+//		  	.requestMatchers("/").permitAll() 
+//		  	.and()
+//		  	
+//		  	.authorizeHttpRequests()
+//		  	.requestMatchers("/admin", "/user", "/candidacyconditions").authenticated() 
+//		  	.and()
+//		  	
+//		  	.authorizeHttpRequests()
+//		  	.requestMatchers("/home", "/contactUs").permitAll()  
+//		  	.and()
+//		  	
+//		  	.formLogin().
+//		  	loginPage("/login").permitAll()
+//		  	//.defaultSuccessUrl("/index").failureUrl("/loginError") 
+//		  	.and()
+//		  	.logout()
+//            .permitAll();
+//
+//		  return http.build();
+//		  
+//		  //When add permitAll() "/home" make sure in controller it does not have any @PreAuthorize and it should be @ResponseBody
+//		  
+//	  	
+//	  }
+	
+
+
+	
+//	Authorization
 	  @Bean
 	  SecurityFilterChain SecurityFilterChainOrder1(HttpSecurity http) throws Exception {
+		http.authorizeRequests().requestMatchers("/").permitAll().requestMatchers("/home", "/").permitAll()
+				.requestMatchers("/admin", "/user", "/candidacyconditions").authenticated().requestMatchers("/home", "/contactUs")
+				.permitAll().and().formLogin().loginPage("/login").permitAll()
+				.and().logout().permitAll();
 
-		  return 
-		  http.csrf().disable()
-		  	.authorizeHttpRequests()
-		  	.requestMatchers("/", "/home", "/login").permitAll()
-		  	.and()
-		  	
-		  	.authorizeHttpRequests()
-		  	.requestMatchers("/admin", "/user").authenticated() 
-		  	.and().formLogin()
-		  	.and().build();
-	  	
-	  }
-	
-	
-	//Authentication
-//	@Bean
-//	public UserDetailsService userDetailsService() {
-//		
-//		
-//		UserDetails admin = User.withUsername("admin")
-//				.password("admin")
-//				.roles("ADMIN")
-//				.build();
-//		
-//	
-//		UserDetails user = User.withUsername("user")
-//				.password("user")
-//				.roles("USER") 
-//				.build();
-//		
-//		
-//		return new InMemoryUserDetailsManager(admin, user);
-//		
-////	  return new  UserDetailsServiceImpl();   
-//	}
-	
-//	@Bean 
-//	public  InMemoryUserDetailsManager userDetailsService2() {
-//		
-//		UserDetails admin = User.withUsername("admin")
-//				.password("admin")
-//				.roles("ADMIN")
-//				.build();
-//		
-//	
-////		UserDetails user = User.withUsername("user")
-////				.password("user")
-////				.roles("USER") 
-////				.build();
-//		
-//		return new InMemoryUserDetailsManager(admin);
-//		
-//	}
-//	
-//	@Bean 
-//	public SecurityFilterChain SecurityFilterChain(HttpSecurity http) throws Exception {
-//		
-//		http.authorizeHttpRequests((authz) -> authz 
-//				.requestMatchers("admin") 
-////				.anyRequest() 
-//				.authenticated()
-//				)
-//				.httpBasic();
-//
-//		
-//		return http.build();
-//		
-//	}
-//	
-	
-
+		http.csrf().disable();
+		
+		return http.build();
+	}
     
-//	  @Bean 
-//	  public PasswordEncoder getPassEncoded() { 
-//		  return NoOpPasswordEncoder.getInstance();
-		  
-//		  return new BCryptPasswordEncoder(); 
-//	  }
-
-//    @Override    
-//    protected void configure(HttpSecurity http) throws Exception {    
-//          
-//	      http.authorizeRequests().  
-//	      requestMatchers("/home", "/login", "/Login", "/").permitAll()      
-//	      .requestMatchers("/admin").hasRole("ADMIN")     
-//	      .requestMatchers("/user").hasRole("USER")   
-//	      .and()  
-//	      .formLogin()  ; 
-//	      .loginPage("/login")  
-//	      .and()  
-//	      .logout()  
-//	      .logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
-//	      
-//    }   
-	
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//    	http
-//    		.formLogin(form -> form
-//    			.loginPage("/login")
-//    			.permitAll()
-//    		);
-//    	// ...
-//    }
-    
-	  //let Spring Security allow the use for hasPermission in the JSP page?
-//	  protected Class<?>[] getRootConfigClasses() {
-//		    return new Class[] {
-//		    		SpringSecurityConfigurer.class,
-//		    };
-//		  }
-
-	  
-	  
-    
-	//Authorization
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    			
-//  		http
-//		  .csrf().disable()
-//		  .authorizeHttpRequests()
-//		  .requestMatchers("/", "/home").permitAll()//do not authenticate it(do not show login page)
-//		  .and()
-//		  .authorizeHttpRequests()
-//		  .requestMatchers("/admin").hasRole("ADMIN")
-//		  .and()
-//		  .authorizeHttpRequests()
-//		  .requestMatchers("/user").hasRole("USER")  
-//		  .and()
-//		  .formLogin()
-//		  ; 
-//	      
-//	      return http.build();
-    	
-//    	http
-//		.authorizeHttpRequests((requests) -> requests
-//			.anyRequest().authenticated()
-//		)
-//		.httpBasic(Customizer.withDefaults())
-//		.formLogin(Customizer.withDefaults());
-//	return http.build();	
-//	      
-//	  }
-	  
-	  
-//	  @Bean
-//	  @Order(1) 
-//	  SecurityFilterChain SecurityFilterChainOrder1(HttpSecurity http) throws Exception {
-//	  	http
-//	  		.authorizeHttpRequests((authorize) -> authorize
-//	  			.requestMatchers("/", "/login", "/home").permitAll()
-//	  			.requestMatchers("/admin").hasRole("ADMIN")
-//	  			.requestMatchers("/user").hasRole("USER") 
-//	  			.anyRequest().authenticated()
-//	  		);
-//
-//	  	return http.build();
-//	  }
-
-	  
-//	  @Bean
-//	  @Order(2) 
-//	  SecurityFilterChain SecurityFilterChainOrder2(HttpSecurity http) throws Exception {
-//		  http
-//		  .authorizeHttpRequests((authorize) -> authorize
-//				  .requestMatchers("/admin").permitAll()//hasAuthority("ROLE_ADMIN")  
-//				  .anyRequest().authenticated()
-//				  );
-//		  
-//		  return http.build();
-//	  }
-
-	  
-//	  @Bean
-//	  @Order(3) 
-//	  SecurityFilterChain SecurityFilterChainOrder3(HttpSecurity http) throws Exception {
-//		  http
-//		  .authorizeHttpRequests((authorize) -> authorize
-//				  .requestMatchers("/user").permitAll()//hasAuthority("ROLE_USER")
-//				  .anyRequest().authenticated()
-//				  );
-//		  
-//		  return http.build();
-//	  }
 	  
     
 	  
@@ -291,6 +144,24 @@ public class SpringSecurityConfigurer extends AbstractSecurityWebApplicationInit
     	return authenticationProviderDao; 
 	}
 
+
     
+//    @Resource
+//    protected ApplicationContext applicationContext;
+//    @Bean
+//    public SpringResourceTemplateResolver thymeleafTemplateResolver(){
+//        final SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
+//        templateResolver.setApplicationContext(applicationContext);
+//        templateResolver.setPrefix("/WEB-INF/jsp/"); 
+//        templateResolver.setSuffix(".jsp");  
+//        //templateResolver.setSuffix(".html");
+//        //templateResolver.setTemplateMode(TemplateMode.HTML);  
+//        templateResolver.setCacheable(false);
+//        templateResolver.setOrder(0);
+//        return templateResolver;
+//    }
+    
+    
+
  
 }
