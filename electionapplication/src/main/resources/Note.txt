@@ -1,0 +1,1 @@
+Note1: @PathVariable converted to @RequestParam as method in controller used to be called more than once
