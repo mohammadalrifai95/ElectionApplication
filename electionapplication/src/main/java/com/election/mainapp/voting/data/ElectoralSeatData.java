@@ -1,5 +1,8 @@
 package com.election.mainapp.voting.data;
 
+import java.io.Serializable;
+import java.sql.Date;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -8,14 +11,17 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "T_ElectoralSeat")
-public class ElectoralSeatData {
+public class ElectoralSeatData {//implements Serializable{
 
 
 	public ElectoralSeatData() {
-		// TODO Auto-generated constructor stub
+
+		genericDateAndTimeData = new GenericDateAndTimeData();
 	}
 
 	
@@ -36,7 +42,7 @@ public class ElectoralSeatData {
 
 
 	private String numberOfSeatStr;
-
+	private GenericDateAndTimeData genericDateAndTimeData;
 	
 	public Integer getNumberOfSeat() {
 		return numberOfSeat;
@@ -65,31 +71,6 @@ public class ElectoralSeatData {
 		this.constituencyData = constituencyData;
 	}
 
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return Name;
-	}
-
-	public void setName(String name) {
-		Name = name;
-	}
-	
-
-	public RegionData getRegionData() {
-		return regionData;
-	}
-
-	public void setRegionData(RegionData regionData) {
-		this.regionData = regionData;
-	}
-	
 	
 	
 }

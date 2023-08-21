@@ -143,7 +143,7 @@ label  {
 <body>
 
 <!-- <div   style="background-color: #6CC417; width: 100%; height: 80%" > -->
-<div   style="margin: auto;  border: 3px solid #73AD21; padding: 1px;background-color: #9F2B00; width: 100%; height: 5%; text-align: center;" >
+<div   style="margin: auto;  border: 3px solid #73AD21; padding: 1px;background-color: #679FAB; width: 100%; height: 5%; text-align: center;" >
   <h3>ЦямхПг хъ щМ йьхМч ДыгЦ гАгДйнгхгй - ЕпЕ ЕМ ущми йслМА гАонФА</h3>
 		<label  style="margin-left: 1150px;">  
 			<select name="language" id="language"  onchange="dropDownSelect(this.value)" style=" width: 180px; font-size: 18px;">

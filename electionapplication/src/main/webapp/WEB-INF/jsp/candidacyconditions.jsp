@@ -89,24 +89,36 @@ li a:hover:not(.active) {
 <body>
 
 
-<ul style="width: 200px;">
-	<li style="margin-bottom: 50px; ">
+<ul style="width: 250px;">
+	<li style="margin-bottom: 20px; "> 
 		<a class="active" style="" href="/login?alredyLoggedin=Yes" >
 			Home
 		</a>
 	</li>
-<!-- 	<li> -->
-		<a href="/candidateinformation?viewName=candidacyconditions" id="selectCityLi">
+	
+	<li><a href="/candidateinformation?viewName=home2" id="selectCityLi">How to become a Candidate</a></li>
+	<li><a href="/candidacyconditions">Add New Candidate</a></li>
+	<li><a href="/contactUs">Candidate/Voter</a></li>
+	<li><a href="/news">News</a></li>
+	<!--Note2-->
+	<c:if test="${role == 'ROLE_ADMIN'}">
+        <li><a href="/admin">Admin</a></li> 
+    </c:if>	
+	
+	<li style=" margin-top: 380px;">
+		<a href="/candidateinformation?viewName=candidacyconditions" id="selectCityLi" >
 			Read Candidate Information
 		</a>
-<!-- 	</li> -->
-	 <li style="width: 200px; height: 50px; margin-top: 420px;">  	 
+	</li>
+
+
+	 <li style="width: 200px; height: 50px; margin-top: 10px;" >   	 
 		<a href="/login?alredyLoggedin=Yes" class="active" style="background-color: black">  
 			back 
 		</a>
 	</li>
 </ul>
-<div   style="margin: auto;  border: 3px solid #73AD21; padding: 1px;background-color: #9F2B00; width: 100%; height: 10%; text-align: center;" >
+<div   style="margin: auto;  border: 3px solid #73AD21; padding: 1px;background-color: #679FAB; width: 100%; height: 10%; text-align: center;" >
   <h3 >This is Candidacy Conditions By Law Screen.</h3>
 </div>
 
@@ -194,7 +206,7 @@ li a:hover:not(.active) {
   
   
   
-  <div class='child' style="position: absolute; top: 160px; right: 60px;"> 
+  <div class='child' style="position: absolute; top: 160px; right: 60px; border: none;"> 
 <!--   		<ul style="width: 200px;"> -->
 <!--   				<li> -->
   					<a href="/candidateinformation?viewName=candidacyconditions" id="selectCityLi">

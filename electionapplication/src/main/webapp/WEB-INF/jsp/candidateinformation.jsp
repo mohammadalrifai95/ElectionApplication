@@ -54,13 +54,22 @@ li a:hover:not(.active) {
 </head>
 
 <body>
-<ul style="width: 200px;">
-	<li style="margin-bottom: 50px; ">
+<ul style="width: 250px;">
+	<li style="margin-bottom: 20px; ">
 		<a class="active" style="" href="/login?alredyLoggedin=Yes" >
 			Home
 		</a>
 	</li>
-	 <li style="width: 200px; height: 30px; margin-top: 490px; background-color: black;">   	 
+
+	<li><a href="/candidateinformation?viewName=home2" id="selectCityLi">How to become a Candidate</a></li>
+	<li><a href="/candidacyconditions">Add New Candidate</a></li>
+	<li><a href="/contactUs">Candidate/Voter</a></li>
+	<li><a href="/news">News</a></li>
+	<c:if test="${role == 'ROLE_ADMIN'}">
+        <li><a href="/admin">Admin</a></li> 
+    </c:if>	
+	
+	 <li style="width: 200px; height: 30px; margin-top: 430px; background-color: black;">   	 
 			<c:choose>
 					<c:when test="${PreviousPage == 'home2'}"> 
 			 		<a href="/login?alredyLoggedin=Yes" class="active" style="background-color: black" class="active">Back</a> 
@@ -71,7 +80,7 @@ li a:hover:not(.active) {
 			</c:choose>
 	</li>
 </ul>
-<div   style="margin: auto;  border: 3px solid #73AD21; padding: 1px;background-color: #9F2B00; width: 100%; height: 10%; text-align: center;" >
+<div   style="margin: auto;  border: 3px solid #73AD21; padding: 1px;background-color: #679FAB; width: 100%; height: 10%; text-align: center;" >
   <h3 >Welcome to the Election System app - this is the login page</h3>
 <!--   		<select name="language" id="language" style="margin-right: 1100px;  width: 180px; font-size: 18px;" onchange="dropDownSelect(this.value)" > -->
 <!-- 		  <option value="">Select Language</option> -->

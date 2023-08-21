@@ -18,6 +18,10 @@
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
+		
+		
+		
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jdbc</artifactId>
@@ -184,7 +188,7 @@
 			    <groupId>org.glassfish.web</groupId>
 			    <artifactId>jakarta.servlet.jsp.jstl</artifactId>
 			    <version>2.0.0</version>
-		</dependency>
+			</dependency>
 
 
 		<!--<dependency>-->
@@ -290,9 +294,47 @@
 <!--FOR JWT ENDS-->
 
 
+<!--Note2--> 
+<!--<dependency>-->
+<!--    <groupId>org.springframework.security</groupId>-->
+<!--    <artifactId>spring-security-taglibs</artifactId>-->
+<!--    <version>5.2.2.RELEASE</version>-->
+<!--</dependency>   --> 
+<!--<dependency>-->
+<!--    <groupId>org.springframework.security</groupId>-->
+<!--    <artifactId>spring-security-taglibs</artifactId>-->
+<!--    <version>5.1.5.RELEASE</version>-->
+<!--</dependency>-->
 
+
+
+<!--Aspose.Imaging for Java ********************************************starts-->
+<!--processes scanned images or even smartphone photos in JPG format and creates JPG documents containing recognized text. To add it to your project, you just need to get Aspose.OCR-->
+<!-- website: https://kb.aspose.com/ocr/java/how-to-extract-text-from-image-using-java/-->
+<!--First of all you need to specify Aspose Cloud Maven Repository configuration / location in your Maven pom.xml as below-->
+<!--Note3-->
+<dependency>
+	<groupId>com.aspose</groupId>
+		<artifactId>aspose-ocr</artifactId>
+	<version>23.7.1</version>
+</dependency>
+<!--Aspose.Imaging for Java ********************************************ends-->
 
 	</dependencies>
+	
+	
+<!--First of all you need to specify Aspose Cloud Maven Repository configuration / location in your Maven pom.xml as below-->
+<!--Note3-->
+ <repositories>
+  <repository>
+    <id>AsposeJavaAPI</id>
+    <name>Aspose Java API</name>
+    <url>https://releases.aspose.com/java/repo/</url>
+  </repository>
+</repositories>
+	
+	
+	
 
 	<build>
 		<plugins>

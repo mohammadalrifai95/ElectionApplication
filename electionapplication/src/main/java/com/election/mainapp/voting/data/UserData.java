@@ -2,6 +2,7 @@ package com.election.mainapp.voting.data;
 
 import java.io.Serializable;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.HashSet;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,7 +16,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.Data;
 
 @Data
@@ -29,6 +32,8 @@ public class UserData implements Serializable{
 	
 	//GenericDateAndTimeData genericDateAndTimeData;
 
+	private String fullName;
+	
      private String userName;
      
      private String  password;
@@ -52,16 +57,38 @@ public class UserData implements Serializable{
      private String  lastUpdate;
      
      private String  voterFlag;
+     
+     private String  type;
+
+     //This did not create voter_id in T_user 
+//     //@OneToOne(mappedBy = "userData") 
+//     @OneToOne(mappedBy = "userData", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//     private VoterData voterData;
+     
+     //This will create voter_id in T_user
+ 	@OneToOne
+    @JoinColumn(name="voter_id")
+    private VoterData vData;
+    
+     
+ 	@OneToOne
+    @JoinColumn(name="candidate_id")
+    private CandidateData candidateData;
+    
+ 	
+ 	private GenericDateAndTimeData genericDateAndTimeData;
+
+ 	
+//     Consumer  consumer;
+     
+     
+//     @Transient
+//     private static String  voterFlag2;
 	
 	
 //     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 //     @JoinTable(name = "user_roles", joinColumns = @JoinColumn (name = "user_id"), inverseJoinColumns = @JoinColumn(name ="role_id"))
 //     private Set<RoleData> roleDataSet = new HashSet<>(); 
-     
- 
-     public Integer getId() {
-		return id;
-	}
 
 //	public Set<RoleData> getRoleDataSet() {
 //		return roleDataSet;
@@ -71,118 +98,10 @@ public class UserData implements Serializable{
 //		this.roleDataSet = roleDataSet;
 //	}
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
-	
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	public String getName() {
-		return Name;
-	}
-
-	public void setName(String name) {
-		Name = name;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getMiddleName() {
-		return middleName;
-	}
-
-	public void setMiddleName(String middleName) {
-		this.middleName = middleName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getMobile() {
-		return mobile;
-	}
-
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getRole() {
-		return role;
-	}
-
-	public void setRole(String role) {
-		this.role = role;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public String getLastUpdate() {
-		return lastUpdate;
-	}
-
-	public void setLastUpdate(String lastUpdate) {
-		this.lastUpdate = lastUpdate;
-	}
-
-	public String getVoterFlag() {
-		return voterFlag;
-	}
-
-	public void setVoterFlag(String voterFlag) {
-		this.voterFlag = voterFlag;
-	}
-
-
 	public UserData() {
 		
+		genericDateAndTimeData = new GenericDateAndTimeData(); 
+		
 	}
-	
-	@Override
-    public String toString() {
-        return "User [id=" + id + ", Name=" + Name + ", email=" + email
-                + ", mobile=" + mobile + ", password=" + password + ", role="
-                + role + ", status=" + status + ", lastUpdate=" + lastUpdate
-                + "]";
-    }
 
 }

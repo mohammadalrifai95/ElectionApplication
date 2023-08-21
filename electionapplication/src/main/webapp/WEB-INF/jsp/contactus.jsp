@@ -89,11 +89,22 @@ li a:hover:not(.active) {
   background-color: #555;
   color: white;
 }
+
+.fixedElement {
+    background-color: #c0c0c0;
+    position:fixed;
+    top:0;
+    width:100%;
+    z-index:100;
+}
+
+
+
 </style>
 
 
 <body>
-<ul style="width: 250px;">
+<ul style="width: 250px;  margin-top: 70px;">
   <li><a  class="active">Select one of below options</a></li>
   <li><a href="#home" onclick="addCandidate()" id="AddCandidateMenuLink">Add Candidate</a></li>
   <li><a href="#news" onclick="addVoter()" id="AddvoterMenuLink">Add voter</a></li>
@@ -104,7 +115,7 @@ li a:hover:not(.active) {
 
 <div >
 
-<div   style="margin: auto;  border: 3px solid #73AD21; padding: 1px;background-color: #9F2B00; width: 100%; height: 10%; text-align: center;" >
+<div class="fixedElement"   style="margin: auto;  border: 3px solid #73AD21; padding: 1px;background-color: #679FAB; width: 100%; height: 10%; text-align: center;" >
   <h3 >Welcome, this screen to add candidate/voter</h3>
 </div>
 
@@ -112,9 +123,9 @@ li a:hover:not(.active) {
 <div style="height: 100px;">
 	
 	
-	<div style="margin-left:25%;padding:1px 16px;height:100px;  "  id="homeDive">
+	<div style="margin-left:25%;padding:1px 16px;height:100px;"  id="homeDive">
 	  <h2>Select one option from left menu bar</h2>
-	  <p>add Candidate or Voter..</p> 
+	  <p style="margin-top: 30px;">add Candidate or Voter..</p>  
 	</div>
 	
 	

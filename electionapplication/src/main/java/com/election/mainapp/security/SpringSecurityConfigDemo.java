@@ -35,9 +35,10 @@ import jakarta.servlet.FilterChain;
 //@Configuration
 //@EnableWebSecurity
 //@EnableMethodSecurity
-public class SpringSecurityConfigDemo {
+public class SpringSecurityConfigDemo extends AbstractSecurityWebApplicationInitializer{
+	//extends WebSecurityConfigurerAdapter{
 	//extends AbstractSecurityWebApplicationInitializer
-//WebSecurityConfigurerAdapter{
+//extends WebSecurityConfigurerAdapter{
 
 //	@Autowired
 //	UserDetailsServiceImpl userDetailsServiceImpl ;

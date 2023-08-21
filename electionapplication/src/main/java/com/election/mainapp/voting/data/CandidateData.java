@@ -3,7 +3,9 @@
  */
 package com.election.mainapp.voting.data;
 
+import java.io.Serializable;
 import java.sql.Date;
+
 import java.util.Set;
 import java.util.HashSet;
 
@@ -15,20 +17,26 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.Data;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 
+@Data
 @Entity
 @Table(name = "T_CANDIDATE")
-public class CandidateData {
+public class CandidateData implements Serializable{
 
+	
+	
 	@Id 
 	@GeneratedValue( strategy=GenerationType.AUTO )	
 	private Integer id;
 	private String ssn;
-	private String name;
+	//private String name;
+	private String fullName;
 	private String firstName;
 	private String lastName;
 	private String email;
@@ -39,16 +47,10 @@ public class CandidateData {
 	private String resume;
 	private String companyName;
 	private String  role;
-
+    private String userName;
+    private String  password;
+	private GenericDateAndTimeData genericDateAndTimeData;
 	
-	public String getGender() {
-		return gender;
-	}
-
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
-
 	private String position;
 	private String  mobile;
 	private String  gender;
@@ -57,31 +59,12 @@ public class CandidateData {
 	private String  electoralListNumber;
 	private String  electoralListName;
 	
+    @OneToOne(mappedBy = "candidateData")
+    private UserData userData ;
 	
+	 
 	
-	public String getElectoralListNumber() {
-		return electoralListNumber;
-	}
-
-	public void setElectoralListNumber(String electoralListNumber) {
-		this.electoralListNumber = electoralListNumber;
-	}
-
-	public String getElectoralListName() {
-		return electoralListName;
-	}
-
-	public void setElectoralListName(String electoralListName) {
-		this.electoralListName = electoralListName;
-	}
-
-	public String getYear() {
-		return year;
-	}
-
-	public void setYear(String year) {
-		this.year = year;
-	}
+	 
 
 	public ConstituencyData getConstituencyData() {
 		return constituencyData;
@@ -100,185 +83,26 @@ public class CandidateData {
 	String location;
 	//Address address;
 	
-	@OneToMany(mappedBy = "candidateData",  fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	Set<VoterData> voterDataSet;
+//	@OneToMany(mappedBy = "candidateData",  fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//	Set<VoterData> voterDataSet;
 	
 	public CandidateData() {
 		
-		voterDataSet = new HashSet<VoterData>();
-		
+//		voterDataSet = new HashSet<VoterData>();
+		genericDateAndTimeData = new GenericDateAndTimeData(); 
 	}
 	
-	public Integer getId() {
-		return id;
-	}
-
-
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
 	
-	
-	
-	
-	
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public Set<VoterData> getVoterDataSet() {
-		return voterDataSet;
-	}
-
-	public void setVoterDataSet(Set<VoterData> voterDataSet) {
-		this.voterDataSet = voterDataSet;
-	}
-
-
-	public String getSsn() {
-		return ssn;
-	}
-
-
-
-	public void setSsn(String ssn) {
-		this.ssn = ssn;
-	}
-
-
-
-	public String getName() {
-		return name;
-	}
-
-
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-
-
-	public String getEmail() {
-		return email;
-	}
-
-
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-
-
-	public String getAreaAppliedfor() {
-		return AreaAppliedfor;
-	}
-
-
-
-	public void setAreaAppliedfor(String areaAppliedfor) {
-		AreaAppliedfor = areaAppliedfor;
-	}
-
-
-
-	public String getDepartmentOfAppliedPosition() {
-		return DepartmentOfAppliedPosition;
-	}
-
-
-
-	public void setDepartmentOfAppliedPosition(String departmentOfAppliedPosition) {
-		DepartmentOfAppliedPosition = departmentOfAppliedPosition;
-	}
-
-
-
-	public Date getDate() {
-		return date;
-	}
-
-
-
-	public void setDate(Date date) {
-		this.date = date;
-	}
-
-
-
-	public String getTitle() {
-		return title;
-	}
-
-
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-
-
-	public String getResume() {
-		return resume;
-	}
-
-
-
-	public void setResume(String resume) {
-		this.resume = resume;
-	}
-
-
-
-	public String getCompanyName() {
-		return companyName;
-	}
-
-
-
-	public void setCompanyName(String companyName) {
-		this.companyName = companyName;
-	}
-
-
-
-	public String getStatus() {
-		return status;
-	}
-
-
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-
-
-	public String getPosition() {
-		return position;
-	}
-
-
-
-	public void setPosition(String position) {
-		this.position = position;
-	}
-
+//	public Set<VoterData> getVoterDataSet() {
+//		return voterDataSet;
+//	}
+//
+//	public void setVoterDataSet(Set<VoterData> voterDataSet) {
+//		this.voterDataSet = voterDataSet;
+//	}
+ 
+
+  
 
 
 	public String getAddressStr() {
@@ -298,29 +122,10 @@ public class CandidateData {
 	public void setLocation(String location) {
 		this.location = location;
 	}
-
-
-	public String getMobile() {
-		return mobile;
-	}
-
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
-	}
-
-	
-
-	public String getRole() {
-		return role;
-	}
-
-	public void setRole(String role) {
-		this.role = role;
-	}
+ 
 //	public Address getAddress() {
 //		return address;
 //	}
-
 
 
 //	public void setAddress(Address address) {

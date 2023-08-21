@@ -7,6 +7,11 @@
 
 <%@ page import="com.election.mainapp.constant.GlobalMessage_AR" %>
 <%@ page import="com.election.mainapp.constant.GlobalConstant" %>
+
+<!-- Note2 -->
+<%-- <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %> --%>
+ 
+
     
 <!DOCTYPE html>
 <html>
@@ -19,6 +24,48 @@
 
 </head>
 <style>
+
+
+.dropbtn {
+  background-color: #04AA6D;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {background-color: #ddd;}
+
+.dropdown:hover .dropdown-content {display: block;}
+
+.dropdown:hover .dropbtn {background-color: #3e8e41;}
+
+
+
+
+
+
 
 .parent {
   border: 1px solid black;
@@ -169,19 +216,46 @@ li a:hover:not(.active) {
 .active {
   background-color: #04AA6D;
 }
+
+.fixedElement {
+    background-color: #c0c0c0;
+    position:fixed;
+    top:0;
+    width:100%;
+    z-index:100;
+}
 </style>
 <body>
 
-<ul style="width: 220px;">
+<ul style="width: 220px; margin-top: 30px;">
 	<li><a class="active" href="/home2">Home</a></li>
 	<li><a href="/candidateinformation?viewName=home2" id="selectCityLi">How to become a Candidate</a></li>
 	<li><a href="/candidacyconditions">Add New Candidate</a></li>
 	<li><a href="/contactUs">Candidate/Voter</a></li>
 	<li><a href="/news">News</a></li>
-	<li style="margin-top: 350px; background-color: black;" ><a href="/" style="color: white;">Logout</a></li>
+	<!--Note2-->
+
+	<c:if test="${role == 'ROLE_ADMIN'}">
+        <li><a href="/admin">Admin</a></li> 
+    </c:if>
+	<c:if test="${role == 'ROLE_ADMIN'}">
+        <li><a href="/callBusinessApp">Call Business App</a></li> 
+    </c:if>
+	 
+     <li class="dropdown" style="margin-top: 5px; background-color: black; margin-top: 280px;">     
+	  <button class="dropbtn" style="background-color: grey; width: 300px;">
+	  	<span style="margin-right: 200px;">About &#9660</span>
+	  </button> 
+	  <div class="dropdown-content" > 
+	    <a href="/news">About</a>
+	    <a href="/logoutPage">Logout</a>  
+	    <a href="#">Link 3</a>
+	  </div>
+    </li>
+	<li style=" background-color: black;" ><a href="/logoutPage" style="color: white;">Logout</a></li>
 	<li style="background-color: #04AA6D;" ><a  style="color: white;" id="Next">Next</a></li>
 </ul>
-<header style="background-color: #9F2B00; width:100%;  color:black;">   
+<header class="fixedElement"  style="background-color: #679FAB; width:100%;  color:black; height: 8%;">
 	<c:choose>
     <c:when test="${Language=='Arabic'}"> 
         <h2 style="margin-left: 600px;"> ${ GlobalMessage_AR.WELCOME_MESG_AR}</h2>    
@@ -192,9 +266,30 @@ li a:hover:not(.active) {
         <br />
     </c:otherwise>
 </c:choose>
+ 
+	 <div class="dropdown" style="margin-left: 1310px; ">     
+	  <button class="dropbtn" style="background-color: #9F2B00">About &#9660</button> 
+	  <div class="dropdown-content">
+	    <a href="/news">About</a>
+	    <a href="/logoutPage">Logout</a>  
+	    <a href="#">Link 3</a>
+	  </div>
+	</div>
+
+
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/new_game"
+          android:icon="@drawable/ic_new_game"
+          android:title="@string/new_game"
+          android:showAsAction="ifRoom"/>
+    <item android:id="@+id/help"
+          android:icon="@drawable/ic_help"
+          android:title="@string/help" />
+</menu>
 </header>
   
-<header style="float:right;">
+<header style="float:right; margin-right: 50px">
 	<c:choose>
 	    <c:when test="${Language=='Arabic'}"> 
 			&nbsp&nbsp
@@ -203,12 +298,13 @@ li a:hover:not(.active) {
   			<a href="/"><c:out value="${GlobalMessage_AR.LOGOUT_AR}"/></a> 
 	    </c:when>    
 	    <c:otherwise>
-	    	    <a href="#about">About</a>&nbsp&nbsp 
-  				<a href="/">Logout</a>
+<!-- 	    	    <a href="#about">About</a>&nbsp&nbsp  -->
+  				<a href="/logoutPage">Logout</a> 
 	    </c:otherwise>
 	</c:choose> 
  </header> 
 
+<h2 style="margin-left: 600px;" id="businessAppMsgId"> ${businessApp}</h2>
  
 <div class='parent' id="englishDiv" style="margin-left: 210px; margin-top:1px; margin-bottom:1px; width: 80%;"><!-- ----------------------------------PARENT DIV STARTS---------------------------------- -->   
 	
@@ -442,6 +538,12 @@ li a:hover:not(.active) {
 		// 			document.getElementById("selectConstituencyDropList").style.color = "blue";
 		// 			document.getElementById("selectConstituencyDropList").style.backgroundColor = "pink";			
 				}
+		 		
+		 		
+		 		
+		    	setTimeout(function() {
+		    		$('#businessAppMsgId').hide(); 
+					}, 5000);
 	}// end of window.onload ---------------------------------------------------------------
 
 

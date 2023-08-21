@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.stereotype.Component;
 
 import com.election.mainapp.generic.interfaces.GenericDateAndTimeDataI;
 
@@ -20,7 +21,10 @@ import lombok.Data;
 @Data //All together now: A shortcut for @ToString, @EqualsAndHashCode, @Getter on all fields, @Setter on all non-final fields, and @RequiredArgsConstructor!
 //@Entity 
 @Embeddable
+@Component
 public  class GenericDateAndTimeData implements Serializable{ 
+	
+	
 	
 //	@Id  
 //	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -34,6 +38,11 @@ public  class GenericDateAndTimeData implements Serializable{
     
     public GenericDateAndTimeData() {
 		super();
+		
+		//this.setCreatedBy("System");
+		this.setCreatedTs(new Date());
+		//this.setUpdatedBy("System");
+		this.setUpdatedTs(new Date());
 	}
 
 	@Column(name = "CREATED_BY", nullable = true) 

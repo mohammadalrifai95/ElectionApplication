@@ -1,1 +1,3 @@
 Note1: @PathVariable converted to @RequestParam as method in controller used to be called more than once
+Note2: added library to use sec:authorize in jsp
+Note3:First of all you need to specify Aspose Cloud Maven Repository configuration / location in your Maven pom.xml as below

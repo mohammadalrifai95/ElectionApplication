@@ -1,5 +1,6 @@
 package com.election.mainapp.voting.data;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
@@ -11,18 +12,23 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import lombok.Data;
  
 
 
 
 @Entity
 @Table(name = "T_GOVERNORATE")
-public class GovernorateData {
+@Data
+public class GovernorateData implements Serializable{
 
 	public GovernorateData() {
-		// TODO Auto-generated constructor stub
+		
+		genericDateAndTimeData = new GenericDateAndTimeData();
+	
 	}
 
 	
@@ -35,7 +41,12 @@ public class GovernorateData {
 	@Transient
 	private String selectedItem;
 	
+	private GenericDateAndTimeData genericDateAndTimeData;
 	//private String countryName;
+	
+	
+    @OneToOne(mappedBy = "governorateData", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private VoterData voterData;
 	
 	
 //	@Transient

@@ -53,13 +53,23 @@ li a:hover:not(.active) {
 </style>
 </head>
 <body>
-<ul style="width: 200px;">
-	<li style="margin-bottom: 50px; ">
+<ul style="width: 250px;"> 
+	<li style="margin-bottom: 20px; ">
 		<a class="active" style="" href="/login?alredyLoggedin=Yes" >
 			Home
 		</a>
 	</li>
-	 <li style="width: 200px; height: 30px; margin-top: 490px; background-color: black;">   	 
+	
+	<li><a href="/candidateinformation?viewName=home2" id="selectCityLi">How to become a Candidate</a></li>
+	<li><a href="/candidacyconditions">Add New Candidate</a></li>
+	<li><a href="/contactUs">Candidate/Voter</a></li>
+	<li><a href="/news">News</a></li>
+	<!--Note2-->
+	<c:if test="${role == 'ROLE_ADMIN'}">
+        <li><a href="/admin">Admin</a></li> 
+    </c:if>		
+	
+	 <li style="width: 200px; height: 30px; margin-top: 380px; background-color: black;">   	 
 			<c:choose>
 					<c:when test="${PreviousPage == 'home2'}"> 
 			 		<a href="/login?alredyLoggedin=Yes" class="active" style="background-color: black" class="active">Back</a> 
@@ -70,7 +80,7 @@ li a:hover:not(.active) {
 			</c:choose>
 	</li>
 </ul>
-<header style="background-color: #9F2B00; width:100%;  color:black;">   
+<header style="background-color: #679FAB; width:100%;  color:black;">   
     <h2 style="margin-left: 600px;"> ${ GlobalMessage_AR.WELCOME_MESG_AR}</h2>    
     <br />
  	<h2 style="margin-left: 600px;">Current News</h2>           

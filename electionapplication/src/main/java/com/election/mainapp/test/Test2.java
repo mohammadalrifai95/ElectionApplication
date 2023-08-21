@@ -2,6 +2,10 @@ package com.election.mainapp.test;
 
 public class Test2 implements TestI{
 
+	String name;
+	
+	
+	
 	public Test2() {
 		// TODO Auto-generated constructor stub
 	}

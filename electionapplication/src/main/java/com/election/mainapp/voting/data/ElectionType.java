@@ -1,9 +1,19 @@
 package com.election.mainapp.voting.data;
 
-public class ElectionType {
 
+import java.io.Serializable;
+
+import lombok.Data;
+
+@Data
+public class ElectionType{
+	
+	private GenericDateAndTimeData genericDateAndTimeData;
+	
 	public ElectionType() {
-		// TODO Auto-generated constructor stub
+
+		genericDateAndTimeData = new GenericDateAndTimeData();
 	}
 
+	
 }

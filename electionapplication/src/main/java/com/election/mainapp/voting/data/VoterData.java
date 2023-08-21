@@ -1,69 +1,91 @@
 package com.election.mainapp.voting.data;
 
 
+import java.io.Serializable;
+import java.sql.Date;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "T_VOTER")
-public class VoterData {
+public class VoterData implements Serializable{
 
 	@Id 
     @GeneratedValue( strategy=GenerationType.AUTO )
 	private Integer id;
-	private int ssn;
+	private String fullName;
+	private Integer ssn; 
 	private String idCard;
 	private String nameStr;
 	//private Name Name;
 	//private Address address; 
 	private String addressProof;
 	private String ageProof;
+	private String email;
+	private String  mobile;
 	
-	@ManyToOne	   
-	@JoinColumn(name = "candidate_id") 
-	private CandidateData candidateData; 
+    private String userName;
+    private String  password;
+	
+	//userId
+	//governorateId
+	//constituencyId
+	//regionId
+
+	@OneToOne
+    @JoinColumn(name="governorate_Id")
+    private GovernorateData governorateData;
+	
+	@Transient
+	private Integer governorateId;
+
+	@OneToOne
+	@JoinColumn(name="constituency_Id")
+	private ConstituencyData constituencyData;
+	@Transient
+	private Integer constituencyId;
+	
+//	@OneToOne
+//	@JoinColumn(name="region_Id")
+//	private RegionData regionData;
+	@Transient
+	private Integer regionId;
+	
+//	//This created user_id in T_voter
+//    @OneToOne
+//    @JoinColumn(name="user_id")
+//    private UserData userData;
+	
+	//This did not create user_id in T_voter
+    //@OneToOne(mappedBy = "vData")
+    @OneToOne(mappedBy = "vData", fetch = FetchType.LAZY, cascade = CascadeType.ALL) 
+    private UserData uData;
+	
+//	@ManyToOne	   
+//	@JoinColumn(name = "candidate_id") 
+//	private CandidateData candidateData; 
+	
+	private GenericDateAndTimeData genericDateAndTimeData;
 	
 	public VoterData() {
 		
-		candidateData = new CandidateData();
+//		candidateData = new CandidateData();
+		genericDateAndTimeData = new GenericDateAndTimeData();
 	}
 	
 	
-	public CandidateData getCandidateData() {
-		return candidateData;
-	}
-
-
-	public void setCandidateData(CandidateData candidateData) {
-		this.candidateData = candidateData;
-	}
-	
-	
-	
-	
-	public int getSsn() {
-		return ssn;
-	}
-	public void setSsn(int ssn) {
-		this.ssn = ssn;
-	}
-	public String getIdCard() {
-		return idCard;
-	}
-	public void setIdCard(String idCard) {
-		this.idCard = idCard;
-	}
-	public String getNameStr() {
-		return nameStr;
-	}
-	public void setNameStr(String nameStr) {
-		this.nameStr = nameStr;
-	}
 //	public Name getName() {
 //		return Name;
 //	}
@@ -76,24 +98,6 @@ public class VoterData {
 //	public void setAddress(Address address) {
 //		this.address = address;
 //	}
-	public String getAddressProof() {
-		return addressProof;
-	}
-	public void setAddressProof(String addressProof) {
-		this.addressProof = addressProof;
-	}
-	public String getAgeProof() {
-		return ageProof;
-	}
-	public void setAgeProof(String ageProof) {
-		this.ageProof = ageProof;
-	}
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
 
 
 }

@@ -48,7 +48,8 @@ public class SpringSecurityConfigurer extends AbstractSecurityWebApplicationInit
 	 
 
 	@Autowired
-	UserDetailsServiceImpl userDetailsServiceImpl ;
+	UserDetailsService userDetailsServiceImpl ;
+//	UserDetailsServiceImpl userDetailsServiceImpl ;
 	
 	@Autowired
 	UserDaoI userDaoRepo;
@@ -118,10 +119,16 @@ public class SpringSecurityConfigurer extends AbstractSecurityWebApplicationInit
 //	Authorization
 	  @Bean
 	  SecurityFilterChain SecurityFilterChainOrder1(HttpSecurity http) throws Exception {
-		http.authorizeRequests().requestMatchers("/").permitAll().requestMatchers("/home", "/").permitAll()
-				.requestMatchers("/admin", "/user", "/candidacyconditions").authenticated().requestMatchers("/home", "/contactUs")
-				.permitAll().and().formLogin().loginPage("/login").permitAll()
-				.and().logout().permitAll();
+		
+		  
+		  http.authorizeRequests().requestMatchers("/").permitAll()
+		.requestMatchers("/home", "/").permitAll()
+	  	.requestMatchers("/admin", "/user").permitAll()
+		.requestMatchers( "/candidacyconditions").permitAll()
+		//.requestMatchers( "/candidacyconditions").authenticated()
+		.requestMatchers("/home", "/contactUs").permitAll()
+		.and().formLogin().loginPage("/login").permitAll()
+		.and().logout().permitAll(); 
 
 		http.csrf().disable();
 		
@@ -137,10 +144,11 @@ public class SpringSecurityConfigurer extends AbstractSecurityWebApplicationInit
     public AuthenticationProvider autheticationProvider() { 
     	
     	DaoAuthenticationProvider authenticationProviderDao = new DaoAuthenticationProvider();
-    	//authenticationProviderDao.setUserDetailsService(userDetailsService());  
+    	//authenticationProviderDao.setUserDetailsService(userDetailsService()); 
     	authenticationProviderDao.setUserDetailsService(userDetailsService());   
     	authenticationProviderDao.setPasswordEncoder(passwordEncoder());
-
+    	
+    	
     	return authenticationProviderDao; 
 	}
 

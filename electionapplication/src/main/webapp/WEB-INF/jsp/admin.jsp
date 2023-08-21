@@ -181,7 +181,7 @@ li a:hover:not(.active) {
 	<li style="margin-top: 350px; background-color: black;" ><a href="/" style="color: white;">Logout</a></li>
 	<li style="background-color: #04AA6D;" ><a  style="color: white;" id="Next">Next</a></li>
 </ul>
-<header style="background-color: #9F2B00; width:100%;  color:black;">   
+<header style="background-color: #679FAB; width:100%;  color:black;">   
 	<c:choose>
     <c:when test="${Language=='Arabic'}"> 
         <h2 style="margin-left: 600px;"> ${ GlobalMessage_AR.WELCOME_MESG_AR}</h2>    
@@ -221,7 +221,7 @@ li a:hover:not(.active) {
 				<c:choose>
 				    <c:when test="${Language=='Arabic'}">
 				    Select Country
-						 <select name="country" id="countryAR" style="width:300px; height:80px; margin-top: 50px; text-align: center; font-size: 25px; background-color: #9F2B00"> 
+						 <select name="country" id="countryAR" style="width:300px; height:80px; margin-top: 50px; text-align: center; font-size: 25px; background-color: #679FAB"> 
 				    		<c:forEach items="${mapCountries}" var="country">
 				   		      	<c:if test = "${country.value == 'Jordan'}">
 									<option value="${country.key}" selected>«·√—œ‰ </option>
@@ -429,7 +429,7 @@ li a:hover:not(.active) {
 		// 		alert(cityLable !='');
 		 		if(cityLable !=null && cityLable !=''){  
 					document.getElementById("selectGovernorateDropListENG").style.color = "black";
-					document.getElementById("selectGovernorateDropListENG").style.backgroundColor = "#9F2B00";		
+					document.getElementById("selectGovernorateDropListENG").style.backgroundColor = "#679FAB";		
 					
 					
 		 		   	$("#showSelectedGovernorate2").html(selectedGovernorate);  
@@ -437,7 +437,7 @@ li a:hover:not(.active) {
 					
 		 		   	
 		 			document.getElementById("countryENG").style.color = "black"; 
-		 			document.getElementById("countryENG").style.backgroundColor = "#9F2B00";
+		 			document.getElementById("countryENG").style.backgroundColor = "#679FAB";
 					
 		// 			document.getElementById("selectConstituencyDropList").style.color = "blue";
 		// 			document.getElementById("selectConstituencyDropList").style.backgroundColor = "pink";			
@@ -451,7 +451,7 @@ li a:hover:not(.active) {
 	
 	function countryDropListFun(){
 		document.getElementById("countryENG").style.color = "black"; 
-		document.getElementById("countryENG").style.backgroundColor = "#9F2B00";
+		document.getElementById("countryENG").style.backgroundColor = "#679FAB";
 		$("#countryDropListMsgId").html("Currently only Jordan anabled as country.");
 	}// end of countryDropListFun ----------------------------------------------------------
 
@@ -512,7 +512,7 @@ li a:hover:not(.active) {
 		
 		$('#selectRegionDropListDiv').show();   
 		document.getElementById("selectConstituencyDropList").style.color = "black";
-		document.getElementById("selectConstituencyDropList").style.backgroundColor = "#9F2B00"; 
+		document.getElementById("selectConstituencyDropList").style.backgroundColor = "#679FAB"; 
 		//$("#changeGovernorateAlreadyHappen").html("YES");	
 		//login?alredyLoggedin=Yes
 	}// end of changeConstituency--------------------------------------
@@ -531,12 +531,12 @@ li a:hover:not(.active) {
 		$('#candidatesLable').show();
 		
 		document.getElementById("selectRegionDropList").style.color = "black";
-		document.getElementById("selectRegionDropList").style.backgroundColor = "#9F2B00";   
+		document.getElementById("selectRegionDropList").style.backgroundColor = "#679FAB";   
 		
 		var messageIn5Sec = "You will be directed to new pop up windows in 5 seconds.";
 		$("#countryDropListMsgId").html(messageIn5Sec); 
 		$("#newScreenWillPopupAfter5Sec").html(messageIn5Sec);
-		document.getElementById("newScreenWillPopupAfter5Sec").style.backgroundColor = "#9F2B00";
+		document.getElementById("newScreenWillPopupAfter5Sec").style.backgroundColor = "#679FAB";
 		document.getElementById("newScreenWillPopupAfter5Sec").style.color = "black";
 		 
 		

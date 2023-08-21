@@ -1,8 +1,13 @@
 package com.election.mainapp.homecontroller;
 
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.*;
+import java.net.http.HttpRequest;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -10,6 +15,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Scanner;
 import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +37,14 @@ import org.springframework.web.client.RestTemplate;
 
 import com.election.mainapp.voting.data.CandidateData;
 import com.election.mainapp.voting.data.ConstituencyData;
+import com.election.mainapp.voting.data.GenericDateAndTimeData;
 import com.election.mainapp.voting.data.GovernorateData;
+import com.election.mainapp.voting.data.RegionData;
 import com.election.mainapp.voting.data.UserData;
 import com.election.mainapp.voting.data.VoterData;
+import com.election.mainapp.voting.service.VoterService;
 import com.election.mainapp.voting.serviceI.GenericServiceI;
+import com.election.mainapp.voting.serviceI.VoterServiceI;
 
 //import ch.qos.logback.classic.Logger;
 import java.util.logging.Logger;
@@ -52,6 +62,10 @@ import com.election.mainapp.generic.interfaces.FooExtendedI;
 import com.election.mainapp.voting.data.AreaData;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import com.aspose.ocr.AsposeOCR;
+import com.aspose.ocr.License;
 
 
 @Controller
@@ -64,6 +78,12 @@ public class HomeController {
 	@Autowired
 	GenericServiceI genericService;
 	
+	@Autowired
+	VoterServiceI voterService;
+	
+	@Autowired
+	UserDetailsService userDetailsServiceImpl ;
+//	UserDetailsServiceImpl userDetailsServiceImpl ;
 	
 	 
 	//@PreAuthorize("hasAuthority('ROLE_ADMIN')") 
@@ -71,58 +91,53 @@ public class HomeController {
 	//@RequestMapping(value = "/login", method = RequestMethod.GET)  
 	//@ResponseBody
 //	@PreAuthorize("hasAuthority('ROLE_ADMIN')  or hasAuthority('ROLE_USER') ")
-	@GetMapping(value = "/")
+	@GetMapping(value = "/") 
+//	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public String login(HttpServletRequest request) {
 		
-		getAuthority(); 
+//		getAuthority(); 
 		
 		
-		  populateListOfCountry(request);
-		  String selectedLanguageJsp = returnLanguageSelected(request);
+//		  populateListOfCountry(request);
+//		  String selectedLanguageJsp = returnLanguageSelected(request);
 			
 //		return selectedLanguageJsp;
-		return "login";  
+//		return "login";   
+		return "home";     
+//		return "busenisshome";   
 	}
 	
-//	@GetMapping(value = "/login")
-//	public String loginPage(UserData usrdta, HttpServletRequest request,  String ... alredyLoggedin) { 
-//		
-//		getAuthority(); 
-//		
-//		
-//		populateListOfCountry(request);
-//		String selectedLanguageJsp = returnLanguageSelected(request);
-//		
-////		return selectedLanguageJsp;
-//		return "login";  
-//	}
+	 
+	@GetMapping(value = "/logoutPage")   
+	public String logoutPage(HttpServletRequest request) {
+		
+		HttpSession session = request.getSession();
+		
+		invalidateSession(session);
+ 
+		return "login";  
+	}
 
+
+	private void invalidateSession(HttpSession session) {
+		session.invalidate();
+	}
+	
+	
+	
 //	@ResponseBody 
 	//@PreAuthorize("hasAuthority('ROLE_ADMIN')  or hasAuthority('ROLE_USER') ")
-	//@PreAuthorize("hasAuthority('ROLE_ADMIN')  or hasAuthority('ROLE_USER') ")
-	@GetMapping (value = "/login")   
+	@GetMapping (value = "/login")  
 	//public ModelAndView login(@RequestParam("userName")  String userName, @RequestParam("password") String password , HttpServletRequest request,  String ... alredyLoggedin) {
 		public ModelAndView login(UserData usrdta, HttpServletRequest request,  String ... alredyLoggedin) {
 		
-//		usrdta.setUserName("admin");
-//		usrdta.setPassword("admin");
-//		UserData usrdta = null;
-//		if(StringUtility.isNoneEmpty(userName) && StringUtility.isNoneEmpty(password) ) {
-//			usrdta = new UserData();
-//			usrdta.setUserName(userName);
-//			usrdta.setPassword(password);
-//		}
-		
-		
-		logger.info("This is my first log4j's statement");
+		logger.info("Inside login ...by logger"); 
 		HttpSession session = request.getSession();
 	     if(StringUtility.isNotEmpty((String)request.getParameter("alredyLoggedin")) || 
 	    		(alredyLoggedin != null && StringUtility.isNotEmpty(alredyLoggedin[0]) 
 	    		&& alredyLoggedin[0].equals("Yes"))) {
 	    	 
-	    	  
-	    	 
-	    	 usrdta.setUserName((String)session.getAttribute("usenName") );
+	    	 usrdta.setUserName((String)session.getAttribute("userName") );
 	    	 usrdta.setPassword((String)session.getAttribute("password"));
 	     }
 
@@ -139,14 +154,15 @@ public class HomeController {
 //				session.setAttribute(GlobalConstant.LAUNGAUE_SMALL_LETTER, GlobalConstant.LAUNGAUE_ENGLISH);
 //			}
 			mv.addObject(GlobalConstant.LAUNGAUE_SMALL_LETTER, language_selected);
-			String returnPage = "login";
-			if(language_selected.equals(GlobalConstant.LAUNGAUE_ENGLISH)) {
-				returnPage="login";
-			}else{
-				returnPage="login";
-				//returnPage="login_arabic"; 
-			}
-	     
+			//String returnPage = "login";
+			String returnPage = "home";
+//			if(language_selected.equals(GlobalConstant.LAUNGAUE_ENGLISH)) {	
+//				returnPage="login";
+//			}else{
+//				returnPage="login";
+//				//returnPage="login_arabic"; 
+//			}
+//	     
 			//lambdaExpressionTest();
 		
 		UserData userData = null;
@@ -163,6 +179,12 @@ public class HomeController {
 				mv.addObject("errorLoginMessage", GlobalMessage_AR.EMPTY_USER_PASS_MESSAGE_AR);
 			}
 			
+			//getAuthority();
+			if(usrdta!=null) {
+				assignRoleToModelAndView(mv, usrdta.getRole());
+				session.setAttribute("role", usrdta.getRole());
+			}
+
 			return mv;
 		}
 		
@@ -179,28 +201,79 @@ public class HomeController {
 			
 		}
 		else {
-			session.setAttribute("usenName", userData.getUserName());
+			session.setAttribute("userName", userData.getUserName());
 			session.setAttribute("password", userData.getPassword());
 			
 			populateListOfCountry(request);
-			populateListOfCity(mv);
+			populateListOfCity(mv, request);
 			
-			mv.setViewName("home2");
+			//mv.setViewName("home2");
+			mv.setViewName("home");
 		}
 		
 		}else {
-			System.out.println(session.getAttribute("usenName"));
+			System.out.println(session.getAttribute("userName"));
 			populateListOfCountry(request);
-			populateListOfCity(mv);
+			populateListOfCity(mv, request);
 			mv.setViewName("home2");
 		}
 		
+		if(userData==null) {
+			userData = (UserData) session.getAttribute("userData");
+		}
+		if(session != null) {
+			session.setAttribute("userData" , userData);
+		}
+		
+		
 		if(userData!=null) {
-			//consumeRestAPIUsingRestTemplateTest(userData); 			
+			assignRoleToModelAndView(mv, userData.getRole());
+			session.setAttribute("role", userData.getRole()); 
 		}
 		
 		return mv;
 	}
+
+
+	private void assignRoleToModelAndView(ModelAndView mv, String role ) {
+			//consumeRestAPIUsingRestTemplateTest(userData);  			
+				mv.addObject("role", role); 
+				
+	}
+	
+	@GetMapping (value = "/callBusinessApp")
+	public ModelAndView callBusinessApp(HttpServletRequest request){
+		
+		ModelAndView mv = new ModelAndView(); 
+		HttpSession session = request.getSession(); 
+		UserData userData = (UserData) session.getAttribute("userData");
+
+		  //Call(consume) REST API
+		  String uri = "http://localhost:8081//getData/"+userData.getId();  
+		  RestTemplate restTemplate = new RestTemplate();
+		  
+		  String businessApp = restTemplate.getForObject(uri, String.class);
+		  
+		  
+		  session.setAttribute("businessApp", businessApp);
+		  
+//		  UserData ud = restTemplate.postForObject(uri, usrdta, UserData.class);
+//		  UserData ud  = restTemplate.exchange(uri, HttpMethod.PUT, usrdta, UserData.class, 1);
+		  
+		  if(userData !=null)
+		  assignRoleToModelAndView(mv, userData.getRole());
+		  session.setAttribute("role", userData.getRole()); 
+		  
+		  
+		  mv.setViewName("home2"); 
+		  
+		  populateListOfCountry(request);
+		  populateListOfCity(mv, request);
+		  
+		  return mv; 
+		
+	}
+	
 	
 	
 //	@ResponseBody   
@@ -218,13 +291,14 @@ public class HomeController {
 //	@RolesAllowed("ROLE_ADMIN")
 //	@PreAuthorize("hasAuthority('ROLE_ADMIN')  or hasAuthority('ROLE_USER') ")
 //	@ResponseBody   
-	@PreAuthorize("hasAuthority('ROLE_ADMIN') ") 
+	@PreAuthorize("hasAuthority('ROLE_ADMIN') ")    
 	@RequestMapping(value = "/admin", method = RequestMethod.GET)
 	public String admin(HttpServletRequest request) {
-		
-		getAuthority();
-		//populateListOfCountry(request);
-	   //String selectedLanguageJsp = returnLanguageSelected(request);
+
+		//Use spring security for admin page 
+		//if(!isSessionValid(request, mv)) {
+			//return mv;
+		//}
 			
 		return "admin";
 	}
@@ -232,7 +306,8 @@ public class HomeController {
 	
 //	@RolesAllowed("ROLE_ADMIN")
 //	@ResponseBody 
-	@PreAuthorize("hasAuthority('ROLE_USER') ")     
+//	@PreAuthorize("hasAuthority('ROLE_USER') ")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN') ") 
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
 	public String getUser(HttpServletRequest request) {
 		
@@ -295,9 +370,34 @@ public class HomeController {
 		
 		ModelAndView mv = new ModelAndView();
 		
+		
+		if(!isSessionValid(request, mv)) {
+			
+			return mv;
+		}
+		
+		
 		getListOfCandidateWithPagination(request, mv);
 		
 		return mv;
+	}
+
+
+	private boolean isSessionValid(HttpServletRequest request, ModelAndView mv) {
+		
+		HttpSession session = request.getSession();
+		String userName = (String)session.getAttribute("userName"); 
+		if(session == null || StringUtility.isEmpty(userName) ) { 
+
+			mv.setViewName("login");
+			mv.addObject("errorLoginMessage", "You can not navigate to this screen, please login with your credential first");
+			
+			return false;
+		}
+		
+
+		
+		return true;
 	}
 
 
@@ -332,10 +432,10 @@ public class HomeController {
 	public String home2( HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		
-		String usenName = (String)session.getAttribute("usenName");
+		String userName = (String)session.getAttribute("userName");
 		String password= (String)session.getAttribute("password");
 		
-		System.out.println("usenName = " +usenName + "  password = "+ password);
+		System.out.println("userName = " +userName + "  password = "+ password);
 		
 		
 		return "home2";
@@ -375,10 +475,36 @@ public class HomeController {
 		ModelAndView mv= new ModelAndView();
 		
 		populateListOfCountry(request);
-		populateListOfCity(mv, governorateId );
-		populateListOfConstituencyByGovId(governorateId, mv);
+		populateListOfCity(mv, request, governorateId );
+		populateListOfConstituencyByGovId(governorateId, mv, request); 
 		
 		mv.setViewName("home2");
+		
+		
+		HttpSession session = request.getSession();
+		String role= (String) session.getAttribute("role");
+		assignRoleToModelAndView(mv, role);
+		
+		return mv;
+	}
+	
+	
+	
+	@RequestMapping(value = "/findAllConstituencyByGovId2", method = RequestMethod.GET)
+	public ModelAndView findAllConstituencyByGovId2(Long governorateId, HttpServletRequest request){
+		ModelAndView mv= new ModelAndView();
+		
+		populateListOfCountry(request);
+		populateListOfCity(mv, request, governorateId );
+		populateListOfConstituencyByGovId(governorateId, mv, request);
+		
+		mv.setViewName("voterRegistration");
+//		CityLable
+		
+		HttpSession session = request.getSession();
+		String role= (String) session.getAttribute("role");
+		assignRoleToModelAndView(mv, role);
+		
 		return mv;
 	}
 	
@@ -387,15 +513,18 @@ public class HomeController {
 
 
 
-	private void populateListOfConstituencyByGovId(Long governorateId, ModelAndView mv) {
+	private void populateListOfConstituencyByGovId(Long governorateId, ModelAndView mv, HttpServletRequest request) {
 		
 		List<ConstituencyData>  constituencyDataList= genericService.findListOfConstituencyByGovId(governorateId);
 		mv.addObject("constituencyDataList", constituencyDataList);
 		
+		HttpSession session = request.getSession();
+		session.setAttribute("constituencyDataList", constituencyDataList);
+		
 	}
 
 
-	private void populateListOfCity(ModelAndView mv, Long ... governorateId) { 
+	private void populateListOfCity(ModelAndView mv, HttpServletRequest request, Long ... governorateId) { 
 		
 		//ArrayList<String> listArea = new ArrayList<>();
 		List<GovernorateData>  governorateDataList = genericService.findAllGovernorateDataList();
@@ -417,6 +546,8 @@ public class HomeController {
 		}
 		
 		mv.addObject("governorateDataList", governorateDataList);
+		HttpSession session = request.getSession();
+		session.setAttribute("governorateDataList", governorateDataList);
 		
 	}
 
@@ -662,10 +793,14 @@ public class HomeController {
 	
 	
 	@RequestMapping("/getCandidateByAreaId")
-	public ModelAndView getCandidateByAre(@RequestParam int areId) {
+	public ModelAndView getCandidateByAre(@RequestParam int areId, HttpServletRequest request) {
 		
 		ModelAndView mv = new ModelAndView();
 		
+		if(!isSessionValid(request, mv)) {
+			
+			return mv;
+		}
 		
 		List<String> candidatewithvoterList = populateListAsString(areId);
 		
@@ -788,7 +923,14 @@ public class HomeController {
 
 
 		List<String> messageList = new ArrayList<String>();
-
+		
+		if(!isSessionValid(request, new ModelAndView())) {
+			
+			messageList.add("Failed_Registration");
+			messageList.add("Please redirect to login page and use your credintail");
+			
+			return messageList;
+		}
 		
 		if(StringUtility.isEmpty(candidateData.getFirstName()) 
 				|| StringUtility.isEmpty(candidateData.getLastName())
@@ -812,6 +954,124 @@ public class HomeController {
 		
 		return messageList;
 	}
+	@RequestMapping("/addvoter") 
+	@ResponseBody
+	public List<String> addCandidateFromContactusScreen2(VoterData voterData,HttpServletRequest request) { 
+
+		List<String> messageList = new ArrayList<String>();
+		
+		if(
+				StringUtility.isEmpty(voterData.getFullName())
+//				|| voterData.getGovernorateData()!=null
+//				|| voterData.getConstituencyData()!=null
+//				|| voterData.getRegionData()!=null
+				
+//				StringUtility.isEmpty(voterData.getFirstName()) 
+//				|| StringUtility.isEmpty(voterData.getLastName())
+				//|| StringUtility.isEmpty(candidateData.getMobile())
+				//|| StringUtility.isEmpty(candidateData.getEmail())
+				//|| StringUtility.isEmpty(candidateData.getSsn())
+				//|| StringUtility.isEmpty(candidateData.getLocation())
+//				|| StringUtility.isEmpty(candidateData.getUserName())
+//				|| StringUtility.isEmpty(candidateData.getPassword()
+				
+				) {
+			messageList.add("Failed_Registration");
+			messageList.add("Please fill all below required fileds in order to add new candidate");
+			return messageList;
+		}
+		
+		String fullName = voterData.getFullName();
+		messageList = enterNewName(fullName); 
+		
+		if(messageList.get(0).equals("Failed_Registration")) {
+			return messageList;
+		}
+		
+		
+//		below 2 lines moved to method(voterRegisterWithCredential)
+//		UserData userData = new UserData();
+//		genericService.saveCandidate(candidateData);
+		HttpSession session = request.getSession();
+		session.setAttribute("voterData", voterData);
+		messageList.add("You have Successfully registered, you now can sign in with your credential");
+		
+		setDetailsTovoter(voterData, request);
+		
+		
+		//genericService.saveCandidate(cndidtDta);
+		voterService.saveVoter(voterData);
+		
+		
+		return messageList;
+	}
+	
+	
+	private void setDetailsTovoter(VoterData voterData, HttpServletRequest request) {
+		
+		HttpSession session = request.getSession();
+		
+		List<GovernorateData>  governorateDataList = (ArrayList<GovernorateData> )session.getAttribute("governorateDataList");		
+				governorateDataList.forEach(gData -> {
+			            if (gData.getId().intValue()==voterData.getGovernorateId().intValue()) {
+			            	voterData.setGovernorateData(gData);
+			            }
+			        }
+				);
+		
+		List<ConstituencyData>  constituencyDataList = (ArrayList<ConstituencyData> )session.getAttribute("constituencyDataList"); 
+		constituencyDataList.forEach(cData -> {
+			System.out.println(cData.getId() + "   " +voterData.getConstituencyId());
+			System.out.println(cData.getId()==voterData.getConstituencyId()); 
+                    if (cData.getId().intValue()==voterData.getConstituencyId().intValue()) {
+                    	voterData.setConstituencyData(cData);
+                    }
+                }
+        );
+		
+		
+		//voterData.setRegionData(new RegionData());
+		
+		UserData userData = new UserData();
+		userData.setUserName(voterData.getUserName());
+		userData.setPassword(voterData.getPassword());
+		
+		//userData.setGenericDateAndTimeData(new GenericDateAndTimeData());  
+		userData.getGenericDateAndTimeData().setCreatedBy(voterData.getUserName());
+		//userData.getGenericDateAndTimeData().setCreatedTs(new Date());
+		userData.getGenericDateAndTimeData().setUpdatedBy(voterData.getUserName());
+		userData.getGenericDateAndTimeData().setUpdatedTs(new Date());
+		
+		voterData.setUData(userData);
+		userData.setVData(voterData);     
+		
+//		voterData.setGenericDateAndTimeData(new GenericDateAndTimeData());
+		voterData.getGenericDateAndTimeData().setCreatedBy(voterData.getUserName());
+//		voterData.getGenericDateAndTimeData().setCreatedTs(new Date());
+		voterData.getGenericDateAndTimeData().setUpdatedBy(voterData.getUserName());
+//		voterData.getGenericDateAndTimeData().setUpdatedTs(new Date());
+		
+	}
+
+
+	@RequestMapping("/voterregisterwithcredential") 
+	public ModelAndView voterRegisterWithCredential(VoterData voterData, HttpServletRequest request) {
+	
+		ModelAndView  mv = new ModelAndView();
+
+		
+		HttpSession session = request.getSession();
+		if(session!=null && session.getAttribute("candidateData")!=null) {
+			CandidateData candidateData = (CandidateData) session.getAttribute("candidateData") ;			
+		}
+		voterData = (VoterData) session.getAttribute("voterData") ;
+		UserData userData = new UserData();
+//		genericService.saveCandidate(cndidtDta);
+		
+		mv.setViewName("voterregisterwithcredential");
+		
+		return mv;
+	}
 	
 	
 	@GetMapping(value = "/candidateinformation")
@@ -819,6 +1079,13 @@ public class HomeController {
 		
 		ModelAndView  mv = new ModelAndView();
 		HttpSession session = request.getSession();
+		
+		if(!isSessionValid(request, mv)) {
+			
+			return mv;
+		}
+		
+		
 		
 		if(viewName != null && viewName.length>0 && StringUtility.isNotEmpty(viewName[0])) {
 			//mv.setViewName(viewName[0]); 
@@ -836,8 +1103,15 @@ public class HomeController {
 	public ModelAndView  previousPage(HttpServletRequest request) {
 		
 		ModelAndView  mv = new ModelAndView();
+		
+		if(!isSessionValid(request, mv)) {	
+			return mv;
+		}
+		
+		
 		HttpSession session = request.getSession();
-
+		
+		
 		String previousPage = null;// Default value of String is null
 		
 		if( session != null ) {
@@ -860,21 +1134,30 @@ public class HomeController {
 	@GetMapping(value = "/news") 
 	public ModelAndView  news(HttpServletRequest request) {
 		
-		
 		ModelAndView  mv = new ModelAndView();
+		
+		if(!isSessionValid(request, mv)) {
+			
+			return mv;
+		}
 		
 		mv.setViewName("news");  
 		
 		return mv ;
 	}
-	
-	
+ 
 	
 	
 	@GetMapping(value = "/candidacyconditions")
-	public ModelAndView  redirectToCandidacyConditions() {
+	public ModelAndView  redirectToCandidacyConditions(HttpServletRequest request) {
 		
 		ModelAndView  mv = new ModelAndView();
+		
+		if(!isSessionValid(request, mv)) {
+			
+			return mv;
+		}
+		
 		
 		mv.setViewName("candidacyconditions");
 		
@@ -890,7 +1173,135 @@ public class HomeController {
 		for (Iterator iterator = authorities.iterator(); iterator.hasNext();) {
 			SimpleGrantedAuthority simpleGrantedAuthority = (SimpleGrantedAuthority) iterator.next();
 			System.out.println(simpleGrantedAuthority.getAuthority());  
+//			if(StringUtility.isNotBlank(simpleGrantedAuthority.getAuthority()) ) {
+//				simpleGrantedAuthority = new SimpleGrantedAuthority("ROLE_USER");
+//			}
+//			System.out.println(simpleGrantedAuthority.getAuthority());  
 		}
 	}
+	
+	
+	
+	
+	@RequestMapping("/voterRegistration")
+	public ModelAndView voterRegistration(Map<String, Object> model, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		
+		mv.setViewName("voterRegistration");
+		
+		populateListOfCity(mv, request);
+		
+		return mv;
+	}
+	
+	
+	private List<String> enterNewName(String fullName) { 
+//		Scanner input = new Scanner(System.in);
+		//System.out.println("Enter your full name as it appears in you id");
+		//String userName = input.nextLine();
+		
+		List<String> messageList = new ArrayList<String>();
+		messageList = checkIfEnteredNameAlreadyRegistedIn2020(fullName);
+		
+		return messageList;
+	}
+	
+	private static List<String> checkIfEnteredNameAlreadyRegistedIn2020(String enteredName) {
+		
+		ArrayList<String> ammanVoterNames2020List = new ArrayList<String>();
+		List<String> messageList = new ArrayList<String>();
+		
+		BufferedReader bufReader = null;
+		try {
+			FileReader fileReader=new FileReader("2020_Amman_1_FirstElectoralDistrict.txt");  
+			//FileReader fileReader=new FileReader("2020_Amman_ThirdElectoralDistrict.pdf");  
+			bufReader = new BufferedReader(fileReader);
+			
+			ArrayList<String> listOfLines = new ArrayList<>(); 
+			String line = bufReader.readLine();
+			int i = 0;
+			boolean isTheEnteredNameValied = false;
+			while (line != null) 
+			{ 
+				listOfLines.add(line); 
+				line = bufReader.readLine(); 
+				
+				if(line != null && line.trim().equals(enteredName.trim()))
+				{
+					System.out.println("Name is valid and registered in 2020, you can go ahead and register in this application ");
+					isTheEnteredNameValied = true;
+					messageList.add(0, "Successfull Registration");
+					messageList.add(1, line + " is Valid and registered in 2020");
+					messageList.add(2, line);
+					break;
+				}
+			}
+			
+			if(!isTheEnteredNameValied) {
+				messageList.add(0, "Failed_Registration");
+				messageList.add(1, "The name you entered is not registered in 2020, please register your name before you register in this application");
+				
+				System.out.println("The name you entered is not registered in 2020, please register your name before you register in this application");
+				
+				return messageList;
+			}
+			
+			bufReader.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+//		for(String s: voterNames ) {
+			//System.out.println(s+ "  "+voterNames.indexOf(s) );
+//			if(StringUtility.isNoneEmpty(s)) {
+//				System.out.println(s.trim());				
+//			}
+//		}
+		
+		return messageList; 
+	}
+	
+//	public static void main(String[] args) throws Exception { // main method for extracting text from image
+//	    
+////        License.setLicense("Aspose.OCR.lic");
+//            
+//        AsposeOCR TextExtractFromImage = new AsposeOCR();
+//
+//        String ExtractedTextFromImage = TextExtractFromImage.RecognizePage("Alrifai_DL_name.jpg");
+//        // Save extracted text to a text file using FileWriter
+//        File output = new File("TextExtractFromImageUsingOCR.txt");
+//        FileWriter writer = new FileWriter(output);
+//        writer.write(ExtractedTextFromImage);
+//        writer.flush();
+//        writer.close();
+//    }
+		
+		public static void UploadIdCopyForVerification(){
+		
+		BufferedReader bufReader = null;
+		try {
+			FileReader fileReader=new FileReader("Alrifai_DL.jpg");  
+			//FileReader fileReader=new FileReader("2020_Amman_ThirdElectoralDistrict.pdf");  
+			bufReader = new BufferedReader(fileReader);
+			
+			ArrayList<String> listOfLines = new ArrayList<>(); 
+			String line = bufReader.readLine();
+			int i = 0;
+			boolean isTheEnteredNameValied = false;
+			while (line != null) 
+			{ 
+				listOfLines.add(line); 
+				line = bufReader.readLine(); 
+				System.out.println(line);	
+			}
+			
+			bufReader.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 }
 

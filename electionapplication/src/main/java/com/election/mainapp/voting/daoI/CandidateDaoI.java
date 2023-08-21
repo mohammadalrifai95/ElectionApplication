@@ -10,8 +10,6 @@ import java.util.Optional;
 
 public interface CandidateDaoI  extends JpaRepository<CandidateData, Integer>{
 	
-	
-	
 //	@Query("from CandidateData ")
 //	List<CandidateData> findaCandidateDatas();
 	

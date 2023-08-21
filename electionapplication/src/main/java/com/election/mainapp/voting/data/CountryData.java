@@ -1,5 +1,6 @@
 package com.election.mainapp.voting.data;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import com.election.mainapp.generic.interfaces.GenericDateAndTimeDataI;
@@ -17,11 +18,12 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "T_COUNTRY")
-public class CountryData implements GenericDateAndTimeDataI{
+public class CountryData {//implements Serializable, GenericDateAndTimeDataI{
 
 	
 	public CountryData() {
 		
+		genericDateAndTimeData = new GenericDateAndTimeData();
 	}
 	
 	@Id 
@@ -32,43 +34,9 @@ public class CountryData implements GenericDateAndTimeDataI{
 	private String countryCode;
 	private GenericDateAndTimeData genericDateAndTimeData; 
 	
-	
-	
-	
-
 	@OneToMany(mappedBy = "countryData",  fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	Set<GovernorateData> governorateDataSet;
-	
-	
-	
-	
-	
-	
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getArabicName() {
-		return arabicName;
-	}
-	public void setArabicName(String arabicName) {
-		this.arabicName = arabicName;
-	}
-	
-	public String getCountryCode() {
-		return countryCode;
-	}
-	public void setCountryCode(String countryCode) {
-		this.countryCode = countryCode;
-	}
+	 
 	public Set<GovernorateData> getGovernorateDataSet() {
 		return governorateDataSet;
 	}

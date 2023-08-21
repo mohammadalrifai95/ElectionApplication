@@ -141,11 +141,30 @@ input {
   flex: 0 0 200px;
   margin-left: 10px;
 }
+
+
+.popupBox{
+position:absolute;
+/* background-color: #F5F5F5;  */
+background-color: #679FAB;
+top:70%;
+left:50%;
+width:350px;  /* adjust as per your needs */
+height:280px;   /* adjust as per your needs */
+margin-left:-280px;   /* negative half of width above */
+margin-top:-250px;   /* negative half of height above */
+flex: 0 0 200px;
+border-radius: 20px; 
+background-image: linear-gradient(to top left, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2) 30%, rgba(0, 0, 0, 0));
+box-shadow: inset 2px 2px 3px rgba(255, 255, 255, 0.6), inset -2px -2px 3px rgba(0, 0, 0, 0.6);
+}
+
 </style>
 <body>
 
 <!-- <div   style="background-color: #6CC417; width: 100%; height: 80%" > -->
-<div   style="margin: auto;  border: 3px solid #73AD21; padding: 1px;background-color: #9F2B00; width: 100%; height: 10%; text-align: center;" >
+<!-- background-color: #9F2B00  change it to #679FAB -->
+<div   style="margin: auto;  border: 3px solid #73AD21; padding: 1px;background-color: #679FAB; width: 100%; height: 10%; text-align: center;" >
   <h3>Welcome to the Election System app - this is the login page</h3>
   		<select name="language" id="language" style="margin-right: 1100px;  width: 180px; font-size: 18px;" onchange="dropDownSelect(this.value)" >
 		  <option value="">Select Language</option>
@@ -163,7 +182,7 @@ input {
 	
 	<!-- -----------------------------------------Login Part------------------------------------------------------------------------------------------------------------------- -->
 		<div id="loginDiv" style="margin-top: 50px;">
-			<form action="login">
+			<form action="login" method = "GET">    
 				 <label class="label">User Name:<input class="input" type="text" name="userName"  id="userName" value=""  /></label> 
 				 <label class="label">Password:<input class="input" type="password" name="password"  id="password" value=""  style="margin-left: 1%;" /></label> 
 				 <label class="label"><input type="submit" value="Login" id="Login" name="Login" class="button"></label> 
@@ -200,7 +219,21 @@ input {
 			</div>	
 	
 			<div id="barRegist" >
-				 <input   type="submit" value = "Register" name = "Register" style="background: none!important; border: none; padding: 0!important;font-family: arial, sans-serif;color: #069; text-decoration: underline; cursor: pointer; font-size: 18px; margin-right: 500px; margin-top: 50px; " onclick="ShowRegistDiv(1)">
+				 <!--<input   type="submit" value = "Register" name = "Register" style="background: none!important; border: none; padding: 0!important;font-family: arial, sans-serif;color: #069; text-decoration: underline; cursor: pointer; font-size: 18px; margin-right: 500px; margin-top: 50px; " onclick="ShowRegistDiv(1)"> -->
+				 <input   type="submit" value = "New Account Registeration" id = "newAccountRegisterationId" name = "newAccountRegisterationId" style="background: none!important; border: none; padding: 0!important;font-family: arial, sans-serif;color: #069; text-decoration: underline; cursor: pointer; font-size: 18px; margin-right: 500px; margin-top: 50px; " onclick="newAccountRegisterationFun(1)">
+				 <div id="newAccountRegisterationDiv" class="popupBox" > 
+				 	<div style="margin-right: 100px;">
+						<img style="width: 20px; height: 20px; cursor: pointer; margin-left: 315px;" src="<c:url value="/resources/images/crossMarkSymbols.jpg" />"  onclick="newAccountRegisterationFun_2()" />
+						<br><b style="color: white; font-weight: bold; font-size: 20px;"> New User - Registration: </b><br>
+						<h4 id="dispId" style= "color:green"> </h4>   
+						<h4 id="errorId" style= "color:red"> </h4>    
+						<input type="radio" id="candidateId" name="radioWeather"  value="candidate" >Candidate Registration<br>   
+						<input type="radio" id="voterId" name="radioWeather" value="voter"><span style="margin-right: 26px;">Voter Registration</span><br>   
+						<input type="radio" id="technicalId" name="radioWeather" value="technical">Technical Registration<br>  
+						<input type="radio" id="adminId" name="radioWeather" value="admin"><span style="margin-right: 22px;">Admin Registration</span><br><br>
+						<button type="button" onclick="checkButton()"  style="background:black; color:white; width:150px; height:30px;	border-radius: 10px; cursor: pointer; font-size: 15px;margin-top: 10px;"> Next</button>
+					</div>
+				 </div>
 			</div>	 
 			<br class="verticalSpace">
 	</div><!----------------------------- end of div child-->
@@ -229,9 +262,16 @@ input {
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
 <script type="text/javascript">
     
+    
     window.onload = function() {
     	$("#barLogin").hide();
     	$('#registDiv').hide();
+    	$('#newAccountRegisterationDiv').hide();
+    	
+    	setTimeout(function() {
+    		$('#errorLoginMessage').hide(); 
+			}, 5000);    
+    	
 //     	$('#errorLoginMessage').hide();
 		
 // 	    $('#arabicDiv').show();
@@ -242,6 +282,44 @@ input {
 		
     }
 
+    	  
+
+    function newAccountRegisterationFun(areId){
+    	$('#newAccountRegisterationDiv').show();
+// 		setTimeout(function() {
+// 			newAccountRegisterationFun_2();
+// 			}, 20000);  
+    	}
+    
+    function newAccountRegisterationFun_2(){
+	    	$('#newAccountRegisterationDiv').hide();
+    	}
+    
+    function checkButton() {
+    	
+        if(document.getElementById('candidateId').checked) {   
+            //document.getElementById("dispId").innerHTML = document.getElementById("candidateId").value+" radio button is checked";
+            window.location.href = "welcome"
+        }   
+        else if(document.getElementById('voterId').checked) {   
+            //document.getElementById("dispId").innerHTML= document.getElementById("voterId").value+" radio button is checked";
+        	window.location.href = "voterRegistration"
+        }   
+        else if(document.getElementById('technicalId').checked) {   
+            //document.getElementById("dispId").innerHTML= document.getElementById("technicalId").value+" radio button is checked";     
+        }   
+        else if(document.getElementById('adminId').checked) {   
+            //document.getElementById("dispId").innerHTML= document.getElementById("adminId").value+" radio button is checked";     
+        }  
+        else {
+        	$('#errorId').show(); 
+    		document.getElementById("errorId").innerHTML= "You have not selected any season";
+    		setTimeout(function() {
+    			$('#errorId').hide();	 
+			}, 3000); 
+               
+        }   
+    }
     
     
     
@@ -271,6 +349,7 @@ input {
     	$('#barRegist').show();
     	$('#barLogin').hide();
     	$('#loginDiv').show();
+    	$('#newAccountRegisterationDiv').hide();
     	
     }
     
